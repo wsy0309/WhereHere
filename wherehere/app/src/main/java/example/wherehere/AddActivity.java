@@ -10,18 +10,41 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.odsay.odsayandroidsdk.API;
+import com.odsay.odsayandroidsdk.ODsayData;
+import com.odsay.odsayandroidsdk.ODsayService;
+import com.odsay.odsayandroidsdk.OnResultCallbackListener;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by user on 2017-12-04.
  */
 public class AddActivity extends AppCompatActivity implements View.OnClickListener{
 
+    private ODsayService odsayService;
+
     private EditText editText1;
     private EditText editText2;
+
+    //출발역들 정보저장 역이름, x, y좌표
+    private StationPoint start1;
+    private StationPoint start2;
 
     @Override
     protected  void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
+
+        //API 설정 초기화
+        odsayService = ODsayService.init(this, getString(R.string.odsay_key));
+        odsayService.setReadTimeout(5000);
+        odsayService.setConnectionTimeout(5000);
+
+        start1 = new StationPoint();
+        start2 = new StationPoint();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -69,19 +92,20 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
                 //ë‘˜ë‹¤ ë¹ˆê°’ì´ ì—†ì„ë•Œ
                 if((getEdit1.getBytes().length > 0) && (getEdit2.getBytes().length > 0)){
-                    //ê³„ì‚° í›„ ë‹¤ìŒ íŽ˜ì´ì§€ë¡œ ë„˜ê¹€
-                    //ì¤‘ê°„ì—­ ê³„ì‚° -> ì¶”ì²œì—­ 3ê°œ
-                    Intent intent = new Intent(AddActivity.this,SearchActivity.class);
-                    //ì¶œë°œì§€ ì„ íƒì„ ìœ„í•´ ìž…ë ¥ê°’ë„ ë„˜ê²¨ì¤Œ
-                    intent.putExtra("input1",String.valueOf(editText1.getText()));
-                    intent.putExtra("input2",String.valueOf(editText2.getText()));
+                    start1.setStationName(getEdit1);
+                    start2.setStationName(getEdit2);
+                    findRecommend();
+//                    Intent intent = new Intent(AddActivity.this,SearchActivity.class);
+
+//                    intent.putExtra("input1",String.valueOf(editText1.getText()));
+//                    intent.putExtra("input2",String.valueOf(editText2.getText()));
+
                     //ê³„ì‚°ê²°ê³¼ ë„˜ê²¨ì¤„ê±°ë„ ì¶”ê°€í•„ìš”
                     //intent.putExtra("recommend1",ì¶”ì²œì—­[0]);
                     //intent.putExtra("recommend2",ì¶”ì²œì—­[1]);
                     //intent.putExtra("recommend3",ì¶”ì²œì—­[2]);
-                    startActivity(intent);
-                }
-                else {
+//                    startActivity(intent);
+                }else {
                     ErrorDialog dialog = new ErrorDialog(this);
                     dialog.show();
                 }
@@ -91,9 +115,132 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
 
 
+    private OnResultCallbackListener findMidStationListener = new OnResultCallbackListener() {
+        @Override
+        //api 호출 성공
+        public void onSuccess(ODsayData oDsayData, API api) {
+            JSONObject jsonObject = new JSONObject();
+            JSONArray subRouteArray = new JSONArray();
+            RecommendStation recommendStation = new RecommendStation();
+            int stationCount = 0, midStationCnt = 0, subCount = 0;
+            int[] sectionCount = new int[30];
 
+            //호출한 api가 맞을 경우
+            if (api == API.SEARCH_PUB_TRANS_PATH) {
+                jsonObject = oDsayData.getJson();
 
+                try {
+                    subRouteArray = oDsayData.getJson().getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONArray("subPath");
+                    subCount = subRouteArray.length();
 
+                    //subroute의 개수만큼 arraylist생성하여 값 할당
+                    for(int i = 0; i < subCount; i++) {
+                        if(subRouteArray.getJSONObject(i).getInt("trafficType") == 1) {
+                            try {
+                                sectionCount[i] = Integer.parseInt(subRouteArray.getJSONObject(i).getString("stationCount"));
+                            }catch(NumberFormatException nfe){
+                                nfe.printStackTrace();
+                            }
+                            stationCount += sectionCount[i];
+                        }else{
+                            sectionCount[i] = 0;
+                        }
+                    }
+                    midStationCnt = stationCount / 2;
+                    for(int i = 0; i < subCount; i++){
+                        if(subRouteArray.getJSONObject(i).getInt("trafficType") == 1) {
+                            if (sectionCount[i] > midStationCnt) {
+                                recommendStation.setMidstation(subRouteArray.getJSONObject(i).getJSONObject("passStopList").getJSONArray("stations").getJSONObject(midStationCnt).getString("stationName"));
+                                i = subCount;
+                            }else{
+                                midStationCnt = midStationCnt - sectionCount[i] -1;
+                            }
+                        }
+                    }
+                    //recommendStation의 midstation에 중간역 저장되어 있음
+                    //여기서 추천역 골라서 recommedstation 마져 채우고 intent 사용해서 search activity로 넘겨주면 됨 ㅇㅇ
+                    //넘겨야 되는게 start1, start2, recommendstation이렇게!!
+                    StationPoint recommend1= new StationPoint();
+                    StationPoint recommend2= new StationPoint();
+                    StationPoint recommend3= new StationPoint();
+                    recommend1.setStationName("정자");
+                    recommend2.setStationName("미금");
+                    recommend3.setStationName("수내");
 
+                    recommendStation.setRecommend1(recommend1);
+                    recommendStation.setRecommend2(recommend2);
+                    recommendStation.setRecommend3(recommend3);
+
+                    Intent intent = new Intent(AddActivity.this,SearchActivity.class);
+                    intent.putExtra("start1", start1);
+                    intent.putExtra("start2", start2);
+                    intent.putExtra("recommend", recommendStation);
+
+                    startActivity(intent);
+
+                }catch (JSONException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+        @Override
+        public void onError(int i, String errorMessage, API api) {
+            //  stationPoint.setX("API : " + api.name() + "\n" + errorMessage);
+            //  stationPoint.setY("API : " + api.name() + "\n" + errorMessage);
+        }
+    };
+
+    private OnResultCallbackListener searchStationPointListener = new OnResultCallbackListener() {
+        @Override
+        //api 호출 성공
+        public void onSuccess(ODsayData oDsayData, API api) {
+            //호출한 api가 맞을 경우
+            if (api == API.SEARCH_STATION) {
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject = oDsayData.getJson().getJSONObject("result").getJSONArray("station").getJSONObject(0);
+                    //start1 할당
+                    start1.setX(Double.toString(jsonObject.getDouble("x")));
+                    start1.setY(Double.toString(jsonObject.getDouble("y")));
+                    //start2좌표 채워야딩
+                    odsayService.requestSearchStation(start2.getStationName(), "1000", "2", "", "", "", searchStationPointListener2);
+                }catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        @Override
+        public void onError(int i, String errorMessage, API api) {
+        }
+    };
+
+    private OnResultCallbackListener searchStationPointListener2 = new OnResultCallbackListener() {
+        @Override
+        public void onSuccess(ODsayData oDsayData, API api) {
+            //호출한 api가 맞을 경우
+            if (api == API.SEARCH_STATION) {
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject = oDsayData.getJson().getJSONObject("result").getJSONArray("station").getJSONObject(0);
+                    //start2 할당
+                    start2.setX(Double.toString(jsonObject.getDouble("x")));
+                    start2.setY(Double.toString(jsonObject.getDouble("y")));
+
+                    odsayService.requestSearchPubTransPath(start1.getX(),start1.getY(), start2.getX(), start2.getY(),"0","","1", findMidStationListener);
+                }catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        @Override
+        public void onError(int i, String errorMessage, API api) {
+        }
+    };
+
+    public void findRecommend(){
+        //api 호출 - 첫번째 출발역
+        odsayService.requestSearchStation(start1.getStationName(), "1000", "2", "","","", searchStationPointListener);
+    }
 
 }
+

@@ -9,19 +9,20 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.odsay.odsayandroidsdk.ODsayService;
+
 /**
  * Created by user on 2017-12-04.
  */
 
 public class SearchActivity extends Activity implements View.OnClickListener{
-
+    private ODsayService odsayService;
 
     private ListView mListView;
-    private String start1;
-    private String start2;
-    private String recom1;
-    private String recom2;
-    private String recom3;
+    private StationPoint start1;
+    private StationPoint start2;
+    private RecommendStation recommendStation;
+
     private MyItem passItem;
 
     @Override
@@ -31,14 +32,11 @@ public class SearchActivity extends Activity implements View.OnClickListener{
         setContentView(R.layout.activity_search);
 
         Intent intent = new Intent(this.getIntent());
-        /* intentë¡œ ë„˜ì–´ì˜¨ ìž…ë ¥ê°’ */
-        //ì¶œë°œì§€
-        start1 = intent.getStringExtra("input1");
-        start2 = intent.getStringExtra("input2");
-        //ì¶”ì²œì—­
-//        recom1=  intent.getStringExtra("recommend1");
-//        recom2=  intent.getStringExtra("recommend2");
-//        recom3=  intent.getStringExtra("recommend3");
+
+        start1 = (StationPoint) intent.getSerializableExtra("start1");
+        start2 = (StationPoint) intent.getSerializableExtra("start2");
+        recommendStation = (RecommendStation) intent.getSerializableExtra("recommend");
+
 
 
         /* ìœ„ì ¯ê³¼ ë©¤ë²„ë³€ìˆ˜ ì°¸ì¡° íšë“ */
@@ -54,7 +52,7 @@ public class SearchActivity extends Activity implements View.OnClickListener{
     public void onClick(View v){
         switch (v.getId()) {
             case R.id.detailButton:
-                SelectDialog dialog = new SelectDialog(this,start1,start2);
+                SelectDialog dialog = new SelectDialog(this,start1.getStationName(),start2.getStationName());
                 dialog.setDialogListener(new MyDialogListener() {  // MyDialogListener ë¥¼ êµ¬í˜„
                     @Override
                     public void onPositiveClicked(MyItem myItem) {
@@ -77,9 +75,10 @@ public class SearchActivity extends Activity implements View.OnClickListener{
         final MyListAdapter mMyAdapter = new MyListAdapter();
         passItem = new MyItem();
 
-        for (int i=1; i<4; i++) {
-            mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.list_icon), "Station_" + i, "Time_" + i);
-        }
+        mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.list_icon), "Station_" + recommendStation.getRecommend1().getStationName(),"Time_");
+        mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.list_icon), "Station_" + recommendStation.getRecommend2().getStationName() , "Time_");
+        mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.list_icon), "Station_" + recommendStation.getRecommend3().getStationName() , "Time_");
+
 
         /* ë¦¬ìŠ¤íŠ¸ë·°ì— ì–´ëŒ‘í„° ë“±ë¡ */
         mListView.setAdapter(mMyAdapter);

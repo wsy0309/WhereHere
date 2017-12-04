@@ -37,7 +37,9 @@
         android:layout_alignParentTop="true"
         android:ems="10"
         android:hint= "내위치역"
-        android:inputType="text" />
+        android:privateImeOptions="defaultInputmode=korean"/>
+        <!--android:inputType="text"-->
+
 
     <EditText
         android:id="@+id/editText2"
@@ -48,7 +50,9 @@
         android:layout_toLeftOf="@+id/insertButton"
         android:ems="10"
         android:hint="너위치역"
-        android:inputType="text" />
+
+        android:privateImeOptions="defaultInputmode=korean"/>
+       <!--android:inputType="text"-->
 
     <Button
         android:id="@+id/insertButton"
