@@ -1,0 +1,61 @@
+package example.wherehere;
+
+import android.app.Dialog;
+import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
+
+/**
+ * Created by user on 2017-12-04.
+ */
+
+public class AddDialog extends Dialog implements View.OnClickListener {
+
+    private MyDialogListener dialogListener;
+    private Context context;
+    private TextView cancelTv;
+    private TextView checkTv;
+    private EditText markEt;
+
+    public AddDialog(@NonNull Context context){
+        super(context);
+        this.context = context;
+    }
+
+    public void setDialogListener(MyDialogListener dialogListener){
+        this.dialogListener = dialogListener;
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.dialog_add);
+
+        markEt = (EditText) findViewById(R.id.addMarkText);
+
+        cancelTv = (TextView) findViewById(R.id.DialogCancelTv);
+        checkTv = (TextView) findViewById(R.id.DialogCheckTv);
+
+        cancelTv.setOnClickListener(this);
+        checkTv.setOnClickListener(this);
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.DialogCancelTv:
+                cancel();
+                break;
+            case R.id.DialogCheckTv:
+                String mark = markEt.getText().toString();
+                dialogListener.onPositiveClicked(mark);
+                dismiss();
+                break;
+        }
+    }
+}
