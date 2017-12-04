@@ -17,7 +17,6 @@ import com.odsay.odsayandroidsdk.OnResultCallbackListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * Created by user on 2017-12-04.
@@ -119,7 +118,6 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         @Override
         //api 호출 성공
         public void onSuccess(ODsayData oDsayData, API api) {
-            JSONObject jsonObject = new JSONObject();
             JSONArray subRouteArray = new JSONArray();
             RecommendStation recommendStation = new RecommendStation();
             int stationCount = 0, midStationCnt = 0, subCount = 0;
@@ -127,7 +125,6 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
             //호출한 api가 맞을 경우
             if (api == API.SEARCH_PUB_TRANS_PATH) {
-                jsonObject = oDsayData.getJson();
 
                 try {
                     subRouteArray = oDsayData.getJson().getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONArray("subPath");
@@ -160,6 +157,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                     //recommendStation의 midstation에 중간역 저장되어 있음
                     //여기서 추천역 골라서 recommedstation 마져 채우고 intent 사용해서 search activity로 넘겨주면 됨 ㅇㅇ
                     //넘겨야 되는게 start1, start2, recommendstation이렇게!!
+
                     StationPoint recommend1= new StationPoint();
                     StationPoint recommend2= new StationPoint();
                     StationPoint recommend3= new StationPoint();
@@ -170,6 +168,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                     recommendStation.setRecommend1(recommend1);
                     recommendStation.setRecommend2(recommend2);
                     recommendStation.setRecommend3(recommend3);
+
 
                     Intent intent = new Intent(AddActivity.this,SearchActivity.class);
                     intent.putExtra("start1", start1);
@@ -190,18 +189,38 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         }
     };
 
+
+    private OnResultCallbackListener searchStationPointListener2 = new OnResultCallbackListener() {
+        @Override
+        public void onSuccess(ODsayData oDsayData, API api) {
+            //호출한 api가 맞을 경우
+            if (api == API.SEARCH_STATION) {
+                try {
+                    //start2 할당
+                    start2.setX(Double.toString(oDsayData.getJson().getJSONObject("result").getJSONArray("station").getJSONObject(0).getDouble("x")));
+                    start2.setY(Double.toString(oDsayData.getJson().getJSONObject("result").getJSONArray("station").getJSONObject(0).getDouble("y")));
+
+                    odsayService.requestSearchPubTransPath(start1.getX(),start1.getY(), start2.getX(), start2.getY(),"0","","1", findMidStationListener);
+                }catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        @Override
+        public void onError(int i, String errorMessage, API api) {
+        }
+    };
+
     private OnResultCallbackListener searchStationPointListener = new OnResultCallbackListener() {
         @Override
         //api 호출 성공
         public void onSuccess(ODsayData oDsayData, API api) {
             //호출한 api가 맞을 경우
             if (api == API.SEARCH_STATION) {
-                JSONObject jsonObject = new JSONObject();
                 try {
-                    jsonObject = oDsayData.getJson().getJSONObject("result").getJSONArray("station").getJSONObject(0);
                     //start1 할당
-                    start1.setX(Double.toString(jsonObject.getDouble("x")));
-                    start1.setY(Double.toString(jsonObject.getDouble("y")));
+                    start1.setX(Double.toString(oDsayData.getJson().getJSONObject("result").getJSONArray("station").getJSONObject(0).getDouble("x")));
+                    start1.setY(Double.toString(oDsayData.getJson().getJSONObject("result").getJSONArray("station").getJSONObject(0).getDouble("y")));
                     //start2좌표 채워야딩
                     odsayService.requestSearchStation(start2.getStationName(), "1000", "2", "", "", "", searchStationPointListener2);
                 }catch (JSONException e) {
@@ -214,28 +233,6 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         }
     };
 
-    private OnResultCallbackListener searchStationPointListener2 = new OnResultCallbackListener() {
-        @Override
-        public void onSuccess(ODsayData oDsayData, API api) {
-            //호출한 api가 맞을 경우
-            if (api == API.SEARCH_STATION) {
-                JSONObject jsonObject = new JSONObject();
-                try {
-                    jsonObject = oDsayData.getJson().getJSONObject("result").getJSONArray("station").getJSONObject(0);
-                    //start2 할당
-                    start2.setX(Double.toString(jsonObject.getDouble("x")));
-                    start2.setY(Double.toString(jsonObject.getDouble("y")));
-
-                    odsayService.requestSearchPubTransPath(start1.getX(),start1.getY(), start2.getX(), start2.getY(),"0","","1", findMidStationListener);
-                }catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        @Override
-        public void onError(int i, String errorMessage, API api) {
-        }
-    };
 
     public void findRecommend(){
         //api 호출 - 첫번째 출발역
