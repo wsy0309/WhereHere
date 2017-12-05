@@ -1,6 +1,8 @@
 package example.wherehere;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -18,6 +20,9 @@ import com.odsay.odsayandroidsdk.OnResultCallbackListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.ArrayList;
+import java.util.Set;
+
 /**
  * Created by user on 2017-12-04.
  */
@@ -27,6 +32,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
     private EditText editText1;
     private EditText editText2;
+    ArrayList<String> res = new ArrayList<String>();
 
     //출발역들 정보저장 역이름, x, y좌표
     private StationPoint start1;
@@ -44,6 +50,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
         start1 = new StationPoint();
         start2 = new StationPoint();
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -158,17 +165,19 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                     //여기서 추천역 골라서 recommedstation 마져 채우고 intent 사용해서 search activity로 넘겨주면 됨 ㅇㅇ
                     //넘겨야 되는게 start1, start2, recommendstation이렇게!!
 
+                    res = getStringArrayPref(getApplicationContext(), recommendStation.getMidstation());
+
                     StationPoint recommend1= new StationPoint();
                     StationPoint recommend2= new StationPoint();
                     StationPoint recommend3= new StationPoint();
-                    recommend1.setStationName("정자");
-                    recommend2.setStationName("미금");
-                    recommend3.setStationName("수내");
+
+                    recommend1.setStationName(res.get(0));
+                    recommend2.setStationName(res.get(1));
+                    recommend3.setStationName(res.get(2));
 
                     recommendStation.setRecommend1(recommend1);
                     recommendStation.setRecommend2(recommend2);
                     recommendStation.setRecommend3(recommend3);
-
 
                     Intent intent = new Intent(AddActivity.this,SearchActivity.class);
                     intent.putExtra("start1", start1);
@@ -189,6 +198,11 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         }
     };
 
+    private ArrayList<String> getStringArrayPref(Context context, String key) {
+        SharedPreferences prefs = context.getSharedPreferences("RECOMMEND", Context.MODE_PRIVATE);
+        Set<String> set = prefs.getStringSet(key, null);
+        return new ArrayList<String>(set);
+    }
 
     private OnResultCallbackListener searchStationPointListener2 = new OnResultCallbackListener() {
         @Override
