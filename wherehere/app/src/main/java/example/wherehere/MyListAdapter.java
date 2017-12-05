@@ -13,40 +13,46 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import static example.wherehere.R.id.stationImg;
+import static example.wherehere.R.id.stationText;
+import static example.wherehere.R.id.timeText;
+
 /**
  * Created by user on 2017-12-04.
  */
 
 public class MyListAdapter extends BaseAdapter {
 
-    /* Adapterì— ì•„ì´í…œ View íƒ€ìž…ì— ëŒ€í•œ ìƒìˆ˜ë¥¼ ì •ì˜ */
+    /* Adapter에 아이템 View 타입에 대한 상수를 정의 */
     private static final int ITEM_VIEW_TYPE_TAB = 0;
     private static final int ITEM_VIEW_TYPE_RECOM = 1;
     private static final int ITEM_VIEW_TYPE_START = 2;
-    private static final int ITEM_VIEW_TYPE_MAX = 3;
+    private static final int ITEM_VIEW_TYPE_DETAIL_1 = 3;
+    private static final int ITEM_VIEW_TYPE_DETAIL_2 = 4;
+    private static final int ITEM_VIEW_TYPE_MAX = 5;
 
-    /* ì•„ì´í…œì„ ì„¸íŠ¸ë¡œ ë‹´ê¸° ìœ„í•œ ì–´ë ˆì´ */
+    /* 아이템을 세트로 담기 위한 어레이 */
     private ArrayList<MyItem> mItems = new ArrayList<>();
 
-    /* ë¦¬ìŠ¤íŠ¸ ì„ íƒ ì—¬ë¶€ */
+    /* 리스트 선택 여부 */
     private int mSelectedItem = 0;
     private int TAG_UNSELECTED = 0;
     private int TAG_SELECTED = 1;
 
 
-    /* Adapterì— ì‚¬ìš©ë˜ëŠ” ë°ì´í„°ì˜ ê°œìˆ˜ë¥¼ ë¦¬í„´ (í•„ìˆ˜ êµ¬í˜„) */
+    /* Adapter에 사용되는 데이터의 개수를 리턴 (필수 구현) */
     @Override
     public int getCount() {
         return mItems.size();
     }
 
-    /* ì§€ì •í•œ ìœ„ì¹˜(position)ì— ìžˆëŠ” ë°ì´í„° ë¦¬í„´ (í•„ìˆ˜ êµ¬í˜„) */
+    /* 지정한 위치(position)에 있는 데이터 리턴 (필수 구현) */
     @Override
     public MyItem getItem(int position) {
         return mItems.get(position);
     }
 
-    /* ì§€ì •í•œ ìœ„ì¹˜(position)ì— ìžˆëŠ” ë°ì´í„°ì™€ ê´€ê³„ëœ ì•„ì´í…œ(row)ì˜ IDë¥¼ ë¦¬í„´ (í•„ìˆ˜ êµ¬í˜„) */
+    /* 지정한 위치(position)에 있는 데이터와 관계된 아이템(row)의 ID를 리턴 (필수 구현) */
     @Override
     public long getItemId(int position) {
         return position;
@@ -57,7 +63,7 @@ public class MyListAdapter extends BaseAdapter {
         return ITEM_VIEW_TYPE_MAX ;
     }
 
-    /* position ìœ„ì¹˜ì˜ ì•„ì´í…œ íƒ€ìž… ë¦¬í„´ */
+    /* position 위치의 아이템 타입 리턴 */
     @Override
     public int getItemViewType(int position) {
         return mItems.get(position).getType() ;
@@ -75,8 +81,8 @@ public class MyListAdapter extends BaseAdapter {
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            /* ê° ë¦¬ìŠ¤íŠ¸ì— ë¿Œë ¤ì¤„ ì•„ì´í…œì„ ë°›ì•„ì˜¤ëŠ”ë° mMyItem ìž¬í™œìš©
-             * Data Set(MyItem)ì—ì„œ positionì— ìœ„ì¹˜í•œ ë°ì´í„° ì°¸ì¡° íšë“ */
+            /* 각 리스트에 뿌려줄 아이템을 받아오는데 mMyItem 재활용
+             * Data Set(MyItem)에서 position에 위치한 데이터 참조 획득 */
             MyItem myItem = getItem(position);
 
 
@@ -88,7 +94,7 @@ public class MyListAdapter extends BaseAdapter {
                     Button delBtn = (Button) convertView.findViewById(R.id.delButton);
 
                     tabText.setText(myItem.getTabStation());
-                    delBtn.setOnClickListener(new Button.OnClickListener() { //ë¦¬ìŠ¤íŠ¸ì‚­ì œí•˜ê¸°
+                    delBtn.setOnClickListener(new Button.OnClickListener() { //리스트삭제하기
                         @Override
                         public void onClick(View arg0) {
                             mItems.remove(position);
@@ -99,14 +105,13 @@ public class MyListAdapter extends BaseAdapter {
                     break;
                 case ITEM_VIEW_TYPE_RECOM:
                     convertView = inflater.inflate(R.layout.listview_recom,parent, false);
-                    ImageView stationImg = (ImageView) convertView.findViewById(R.id.stationImg);
-                    TextView stationText = (TextView) convertView.findViewById(R.id.stationText);
-                    TextView timeText = (TextView) convertView.findViewById(R.id.timeText) ;
+                    ImageView recomImg = (ImageView) convertView.findViewById(stationImg);
+                    TextView recomText = (TextView) convertView.findViewById(stationText);
+                    TextView recomTime = (TextView) convertView.findViewById(timeText) ;
 
-                    stationImg.setImageDrawable(myItem.getStationImg());
-                    stationText.setText(myItem.getStartText());
-                    timeText.setText(myItem.getTime());
-
+                    recomImg.setImageDrawable(myItem.getRecomImg());
+                    recomText.setText(myItem.getRecomText());
+                    recomTime.setText(myItem.getRecomTime());
                     break;
                 case ITEM_VIEW_TYPE_START:
                     convertView = inflater.inflate(R.layout.listview_dialog,parent, false);
@@ -115,12 +120,40 @@ public class MyListAdapter extends BaseAdapter {
 
                     startImg.setImageDrawable(myItem.getStartImg());
                     startText.setText(myItem.getStartText());
+                    break;
+                case ITEM_VIEW_TYPE_DETAIL_1:
+                    convertView = inflater.inflate(R.layout.listview_detail1,parent, false);
+                    TextView strtEnd = (TextView) convertView.findViewById(R.id.strtEndText);
+                    TextView stationText = (TextView) convertView.findViewById(R.id.stationText);
+                    TextView timeText = (TextView) convertView.findViewById(R.id.timeText);
+                    TextView costText = (TextView) convertView.findViewById(R.id.costText);
+
+                    strtEnd.setText(myItem.getStrtEnd());
+                    stationText.setText(myItem.getStrtEndStation());
+                    timeText.setText(myItem.getStrtEndTime());
+                    costText.setText(myItem.getStrtEndCost());
+                    break;
+                case ITEM_VIEW_TYPE_DETAIL_2:
+                    convertView = inflater.inflate(R.layout.listview_detail2,parent, false);
+                    ImageView typeImg = (ImageView) convertView.findViewById(R.id.typeImg);
+                    TextView typeNum = (TextView) convertView.findViewById(R.id.numText);
+                    TextView subStart = (TextView) convertView.findViewById(R.id.subStartText);
+                    TextView subEnd = (TextView) convertView.findViewById(R.id.subEndText);
+                    TextView subTime = (TextView) convertView.findViewById(R.id.subTimeText);
+                    TextView subDist = (TextView) convertView.findViewById(R.id.subNum);
+
+                    typeImg.setImageDrawable(myItem.getTypeImg());
+                    typeNum.setText(myItem.getTypeNum());
+                    subStart.setText(myItem.getSubStart());
+                    subEnd.setText(myItem.getSubEnd());
+                    subTime.setText(myItem.getSubTime());
+                    subDist.setText(myItem.getSubDist());
 
                     break;
             }
         }
 
-        /* ë¦¬ìŠ¤íŠ¸ ì„ íƒì‹œ ìƒ‰ë³€ê²½ ìœ ì§€ */
+        /* 리스트 선택시 색변경 유지 */
         int type = getItemSelectedType(position);
         if(type == TAG_SELECTED) {
             convertView.setBackgroundColor(Color.parseColor("#F1C40F"));
@@ -136,49 +169,76 @@ public class MyListAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
-    /* listview_tab ì•„ì´í…œ ì¶”ê°€ í•¨ìˆ˜ */
+    /* listview_tab 아이템 추가 함수 */
     public void addItem(String name) {
 
         MyItem mItem = new MyItem();
 
-        /* MyItemì— ì•„ì´í…œì„ settingí•œë‹¤. */
+        /* MyItem에 아이템을 setting한다. */
         mItem.setType(ITEM_VIEW_TYPE_TAB);
         mItem.setTabStation(name);
 
-        /* mItemsì— MyItemì„ ì¶”ê°€í•œë‹¤. */
+        /* mItems에 MyItem을 추가한다. */
         mItems.add(mItem);
 
     }
-    /* listview_recom ì•„ì´í…œ ì¶”ê°€ í•¨ìˆ˜ */
+    /* listview_recom 아이템 추가 함수 */
     public void addItem(Drawable img, String name, String time) {
 
         MyItem mItem = new MyItem();
 
-        /* MyItemì— ì•„ì´í…œì„ settingí•œë‹¤. */
+        /* MyItem에 아이템을 setting한다. */
         mItem.setType(ITEM_VIEW_TYPE_RECOM);
-        mItem.setStationImg(img);
-        mItem.setStartText(name);
-        mItem.setTime(time);
+        mItem.setRecomImg(img);
+        mItem.setRecomText(name);
+        mItem.setRecomTime(time);
 
-        /* mItemsì— MyItemì„ ì¶”ê°€í•œë‹¤. */
+        /* mItems에 MyItem을 추가한다. */
         mItems.add(mItem);
 
     }
-    /* listview_start ì•„ì´í…œ ì¶”ê°€ í•¨ìˆ˜ */
+    /* listview_start 아이템 추가 함수 */
     public void addItem(Drawable img, String name) {
 
         MyItem mItem = new MyItem();
 
-        /* MyItemì— ì•„ì´í…œì„ settingí•œë‹¤. */
+        /* MyItem에 아이템을 setting한다. */
         mItem.setType(ITEM_VIEW_TYPE_START);
         mItem.setStartImg(img);
         mItem.setStartText(name);
 
-        /* mItemsì— MyItemì„ ì¶”ê°€í•œë‹¤. */
+        /* mItems에 MyItem을 추가한다. */
         mItems.add(mItem);
 
     }
 
+    public void addItem(String str1,String str2, String str3, String str4){
+
+        MyItem mItem = new MyItem();
+
+        mItem.setType(ITEM_VIEW_TYPE_DETAIL_1);
+        mItem.setStrtEnd(str1);
+        mItem.setStrtEndStation(str2);
+        mItem.setStrtEndTime(str3);
+        mItem.setStrtEndCost(str4);
+
+        mItems.add(mItem);
+    }
+
+    public void addItem(Drawable img, String str1,String str2, String str3, String str4, String str5){
+
+        MyItem mItem = new MyItem();
+
+        mItem.setType(ITEM_VIEW_TYPE_DETAIL_2);
+        mItem.setTypeImg(img);
+        mItem.setTypeNum(str1);
+        mItem.setSubStart(str2);
+        mItem.setSubEnd(str3);
+        mItem.setSubTime(str4);
+        mItem.setSubDist(str5);
+
+        mItems.add(mItem);
+    }
 
 
 }

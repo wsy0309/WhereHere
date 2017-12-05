@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:clickable="true"
+            android:weightSum="1">
+
+            <TextView
+                android:id="@+id/strtEndText"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="출발역 :"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:gravity="center"
+                android:layout_weight="0.20" />
+
+            <TextView
+                android:id="@+id/stationText"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0.23"
+                android:gravity="center_vertical"
+                android:text="죽전"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal"
+            android:gravity="right|center_vertical"
+            android:clickable="true"
+            android:weightSum="1">
+
+            <TextView
+                android:id="@+id/timeText"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:text="총 시간:34분"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:layout_gravity="right"
+                android:layout_weight="0.30"
+                android:gravity="center"/>
+            <TextView
+                android:id="@+id/costText"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:text="총요금:1000원"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:layout_gravity="right"
+                android:layout_weight="0.25"
+                android:gravity="center"/>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

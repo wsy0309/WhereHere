@@ -3,7 +3,6 @@ package example.wherehere;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.widget.ListView;
 
 /**
@@ -13,8 +12,8 @@ import android.widget.ListView;
 public class DetailActivity extends Activity {
 
     private ListView mListView;
-    private MyItem finalStart;
-    private MyItem finalEnd;
+    private StationPoint finalStart;
+    private StationPoint finalEnd;
 
     @Override
     protected  void onCreate(Bundle savedInstanceState) {
@@ -23,9 +22,12 @@ public class DetailActivity extends Activity {
         setContentView(R.layout.activity_detail);
 
         Intent intent = new Intent(this.getIntent());
-        /* intentë¡œ ë„˜ì–´ì˜¨ ìž…ë ¥ê°’ */
-        finalStart   =  (MyItem)intent.getSerializableExtra("final_start");
-        finalEnd   =  (MyItem)intent.getSerializableExtra("final_end");
+
+        finalStart = new StationPoint();
+        finalEnd = new StationPoint();
+
+        finalStart   =  (StationPoint)intent.getSerializableExtra("start");
+        finalEnd   =  (StationPoint)intent.getSerializableExtra("end");
 
 
         /* ìœ„ì ¯ê³¼ ë©¤ë²„ë³€ìˆ˜ ì°¸ì¡° íšë“ */
@@ -39,8 +41,8 @@ public class DetailActivity extends Activity {
 
         final MyListAdapter mMyAdapter = new MyListAdapter();
 
-        mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.list_icon), finalStart.getStartText());
-        mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.list_icon), finalEnd.getStartText());
+        mMyAdapter.addItem("출발역 :", finalStart.getStationName(), "dd", "dd");
+        mMyAdapter.addItem("도착역 : ", finalEnd.getStationName(), "dd", "dd");
 
         /* ë¦¬ìŠ¤íŠ¸ë·°ì— ì–´ëŒ‘í„° ë“±ë¡ */
         mListView.setAdapter(mMyAdapter);
