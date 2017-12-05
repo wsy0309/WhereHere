@@ -10,6 +10,15 @@ public class StationPoint implements Serializable {
     private String stationName;
     private String x;
     private String y;
+    private int subwayNum;
+
+    public int getSubwayNum() {
+        return subwayNum;
+    }
+
+    public void setSubwayNum(int subwayNum) {
+        this.subwayNum = subwayNum;
+    }
 
     public String getX() {
         return x;

@@ -164,6 +164,8 @@ public class SearchActivity extends Activity implements View.OnClickListener{
 //                    jsonObject = oDsayData.getJson().getJSONObject("result").getJSONArray("station").getJSONObject(0);
                     recommendStation.getRecommend1().setX(Double.toString(oDsayData.getJson().getJSONObject("result").getJSONArray("station").getJSONObject(0).getDouble("x")));
                     recommendStation.getRecommend1().setY(Double.toString(oDsayData.getJson().getJSONObject("result").getJSONArray("station").getJSONObject(0).getDouble("y")));
+                    recommendStation.getRecommend1().setSubwayNum(oDsayData.getJson().getJSONObject("result").getJSONArray("station").getJSONObject(0).getInt("type"));
+
                     odsayService.requestSearchPubTransPath(start1.getX(),start1.getY(), recommendStation.getRecommend1().getX(), recommendStation.getRecommend1().getY(),"0","","0", findTotalTimeListener);
                 }catch (JSONException e) {
                     e.printStackTrace();
@@ -219,6 +221,7 @@ public class SearchActivity extends Activity implements View.OnClickListener{
 //                    jsonObject = oDsayData.getJson().getJSONObject("result").getJSONArray("station").getJSONObject(0);
                     recommendStation.getRecommend2().setX(Double.toString(oDsayData.getJson().getJSONObject("result").getJSONArray("station").getJSONObject(0).getDouble("x")));
                     recommendStation.getRecommend2().setY(Double.toString(oDsayData.getJson().getJSONObject("result").getJSONArray("station").getJSONObject(0).getDouble("y")));
+                    recommendStation.getRecommend2().setSubwayNum(oDsayData.getJson().getJSONObject("result").getJSONArray("station").getJSONObject(0).getInt("type"));
                     odsayService.requestSearchPubTransPath(start1.getX(),start1.getY(), recommendStation.getRecommend2().getX(), recommendStation.getRecommend2().getY(),"0","","0", findTotalTimeListener2);
                 }catch (JSONException e) {
                     e.printStackTrace();
@@ -280,6 +283,7 @@ public class SearchActivity extends Activity implements View.OnClickListener{
 //                    jsonObject = oDsayData.getJson().getJSONObject("result").getJSONArray("station").getJSONObject(0);
                     recommendStation.getRecommend3().setX(Double.toString(oDsayData.getJson().getJSONObject("result").getJSONArray("station").getJSONObject(0).getDouble("x")));
                     recommendStation.getRecommend3().setY(Double.toString(oDsayData.getJson().getJSONObject("result").getJSONArray("station").getJSONObject(0).getDouble("y")));
+                    recommendStation.getRecommend3().setSubwayNum(oDsayData.getJson().getJSONObject("result").getJSONArray("station").getJSONObject(0).getInt("type"));
                     odsayService.requestSearchPubTransPath(start1.getX(),start1.getY(), recommendStation.getRecommend3().getX(), recommendStation.getRecommend3().getY(),"0","","0", findTotalTimeListener3);
                 }catch (JSONException e) {
                     e.printStackTrace();
@@ -303,8 +307,4 @@ public class SearchActivity extends Activity implements View.OnClickListener{
         //api 호출
         odsayService.requestSearchStation(recommendStation.getRecommend3().getStationName(), "1000", "2", "","","", searchStationPointListener3);
     }
-
-
-
-
 }

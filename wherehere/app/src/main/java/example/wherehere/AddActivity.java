@@ -213,6 +213,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                     //start2 할당
                     start2.setX(Double.toString(oDsayData.getJson().getJSONObject("result").getJSONArray("station").getJSONObject(0).getDouble("x")));
                     start2.setY(Double.toString(oDsayData.getJson().getJSONObject("result").getJSONArray("station").getJSONObject(0).getDouble("y")));
+                    start2.setSubwayNum(oDsayData.getJson().getJSONObject("result").getJSONArray("station").getJSONObject(0).getInt("type"));
 
                     odsayService.requestSearchPubTransPath(start1.getX(),start1.getY(), start2.getX(), start2.getY(),"0","","1", findMidStationListener);
                 }catch (JSONException e) {
@@ -235,6 +236,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                     //start1 할당
                     start1.setX(Double.toString(oDsayData.getJson().getJSONObject("result").getJSONArray("station").getJSONObject(0).getDouble("x")));
                     start1.setY(Double.toString(oDsayData.getJson().getJSONObject("result").getJSONArray("station").getJSONObject(0).getDouble("y")));
+                    start1.setSubwayNum(oDsayData.getJson().getJSONObject("result").getJSONArray("station").getJSONObject(0).getInt("type"));
                     //start2좌표 채워야딩
                     odsayService.requestSearchStation(start2.getStationName(), "1000", "2", "", "", "", searchStationPointListener2);
                 }catch (JSONException e) {
