@@ -87,7 +87,7 @@ public class SearchActivity extends NMapActivity implements View.OnClickListener
     public void onClick(View v){
         switch (v.getId()) {
             case R.id.detailButton:
-                SelectDialog dialog = new SelectDialog(this,start1.getStationName(),start2.getStationName());
+                SelectDialog dialog = new SelectDialog(this,start1,start2);
                 dialog.setDialogListener(new MyDialogListener() {  // MyDialogListener ë¥¼ êµ¬í˜„
                     @Override
                     public void onPositiveClicked(MyItem myItem) {

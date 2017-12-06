@@ -23,12 +23,14 @@ public class SelectDialog extends Dialog implements View.OnClickListener {
     private TextView checkTv;
 
     private ListView mListView;
-    private String start1;
-    private String start2;
+    private StationPoint start1;
+    private StationPoint start2;
     private MyItem passItem;
 
+    private ImageSelector imageSelector;
 
-    public SelectDialog(@NonNull Context context, String start1, String start2){
+
+    public SelectDialog(@NonNull Context context, StationPoint start1, StationPoint start2){
         super(context);
         this.context = context;
         this.start1 = start1;
@@ -75,12 +77,16 @@ public class SelectDialog extends Dialog implements View.OnClickListener {
     }
 
     private void dataSetting(){
+        imageSelector = new ImageSelector();
+        int id;
 
         final MyListAdapter mMyAdapter = new MyListAdapter();
         passItem = new MyItem();
 
-        mMyAdapter.addItem(ContextCompat.getDrawable(getContext(), R.drawable.list_icon), start1);
-        mMyAdapter.addItem(ContextCompat.getDrawable(getContext(), R.drawable.list_icon), start2);
+        id = imageSelector.selectImage(start1);
+        mMyAdapter.addItem(ContextCompat.getDrawable(getContext(), id), start1.getStationName());
+        id = imageSelector.selectImage(start2);
+        mMyAdapter.addItem(ContextCompat.getDrawable(getContext(), id), start2.getStationName());
 
         /* ë¦¬ìŠ¤íŠ¸ë·°ì— ì–´ëŒ‘í„° ë“±ë¡ */
         mListView.setAdapter(mMyAdapter);

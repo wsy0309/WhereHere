@@ -3,6 +3,7 @@ package example.wherehere;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.widget.ListView;
 
 import com.odsay.odsayandroidsdk.API;
@@ -55,17 +56,43 @@ public class DetailActivity extends Activity {
         /* ìœ„ì ¯ê³¼ ë©¤ë²„ë³€ìˆ˜ ì°¸ì¡° íšë“ */
         mListView = (ListView)findViewById(R.id.listView5);
 
-//        findRoute();
-        dataSetting();
+        findRoute();
+//        dataSetting();
     }
 
     private void dataSetting(){
 
         final MyListAdapter mMyAdapter = new MyListAdapter();
 
-        mMyAdapter.addItem("출발역 :", start.getStationName(), "dd", "dd");
+        mMyAdapter.addItem("출발역 :", start.getStationName(), Integer.toString(route.getTotalTime()), Integer.toString(route.getPayment()));
 
-        mMyAdapter.addItem("도착역 : ", end.getStationName(), "dd", "dd");
+        DetailRoute tmp;
+        int len = route.getDetailRoute().size();
+        int id = 0;
+        for(int i = 0; i <len;i++){
+            tmp = route.getDetailRoute().get(i);
+            if(tmp.getTrafficType() == 1) { //지하철
+                id = R.drawable.icon;
+                mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id), tmp.getSubwayID(), tmp.getStartName(), tmp.getEndName(), tmp.getSectionTime(), tmp.getStationCount());
+            }else if(tmp.getTrafficType() == 2){ //버스
+                id = R.drawable.ic_map_start_over;
+                mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id), tmp.getBusID(), tmp.getStartName(), tmp.getEndName(), tmp.getSectionTime(), tmp.getStationCount());
+
+            }else if(tmp.getTrafficType() == 3){ // 도보
+                id = R.drawable.pin_ballon_bg;
+                if(i == 0){
+                    mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id), "",route.getStartStation(), route.getDetailRoute().get(i+1).getEndName(), tmp.getSectionTime(), Integer.toString((int)tmp.getDistance()));
+
+                }else if(i == len-1){
+                    mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id), "",route.getDetailRoute().get(i-1).getStartName(), route.getEndStation(), tmp.getSectionTime(), Integer.toString((int)tmp.getDistance()));
+
+                }else{
+                    mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id), "",route.getDetailRoute().get(i-1).getStartName(), route.getDetailRoute().get(i+1).getEndName(), tmp.getSectionTime(), Double.toString(tmp.getDistance()));
+
+                }
+            }
+        }
+        mMyAdapter.addItem("도착역 : ", end.getStationName(), "", "");
 
 
         mListView.setAdapter(mMyAdapter);
