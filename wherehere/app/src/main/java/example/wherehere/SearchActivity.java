@@ -1,14 +1,20 @@
 package example.wherehere;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.nhn.android.maps.NMapActivity;
+import com.nhn.android.maps.NMapController;
+import com.nhn.android.maps.NMapView;
+import com.nhn.android.maps.overlay.NMapPOIdata;
+import com.nhn.android.mapviewer.overlay.NMapOverlayManager;
+import com.nhn.android.mapviewer.overlay.NMapPOIdataOverlay;
 import com.odsay.odsayandroidsdk.API;
 import com.odsay.odsayandroidsdk.ODsayData;
 import com.odsay.odsayandroidsdk.ODsayService;
@@ -20,8 +26,15 @@ import org.json.JSONException;
  * Created by user on 2017-12-04.
  */
 
-public class SearchActivity extends Activity implements View.OnClickListener{
+public class SearchActivity extends NMapActivity implements View.OnClickListener{
     private ODsayService odsayService;
+
+    NMapController mMapController = null;
+    private LinearLayout MapContainer;
+    private NMapView mMapView;// 지도 화면 View
+    private NMapViewerResourceProvider mMapViewerResourceProvider = null; //NMapViewerResourceProvider 클래스 상속
+    private NMapOverlayManager mOverlayManager; //지도 위에 표시되는 오버레이 객체를 관리한다.
+    private NMapOverlayManager.OnCalloutOverlayListener onCalloutOverlayListener; //말풍선 오버레이 객체 생성 시 호출되는 콜백 인터페이스를 정의한다.
 
     private double[][] totalTime;
 
@@ -52,12 +65,10 @@ public class SearchActivity extends Activity implements View.OnClickListener{
         start1 = (StationPoint) getIntent.getSerializableExtra("start1");
         start2 = (StationPoint) getIntent.getSerializableExtra("start2");
         recommendStation = (RecommendStation) getIntent.getSerializableExtra("recommend");
-        /* ìœ„ì ¯ê³¼ ë©¤ë²„ë³€ìˆ˜ ì°¸ì¡° íšë“ */
+        /* ìœ„ì ¯ê³¼ ë©¤ë²„ë³€ìˆ˜ ì°¸ì¡° íšë“ */
         mListView = (ListView)findViewById(R.id.listView3);
         Button button = (Button)findViewById(R.id.detailButton);
         button.setOnClickListener(this);
-
-
 
         findAverageTime();
         findAverageTime2();
@@ -93,29 +104,67 @@ public class SearchActivity extends Activity implements View.OnClickListener{
                 dialog.show();
                 break;
         }
-
     }
+
+    private void settingMap(){
+        MapContainer =(LinearLayout) findViewById(R.id.map_view);
+
+        // 네이버 지도 객체 생성
+        mMapView = new NMapView(this);
+        // 지도 객체로부터 컨트롤러 추출
+        mMapController = mMapView.getMapController();
+
+
+        mMapView.setClientId(getString(R.string.CLIENT_ID)); // 클라이언트 아이디 값 설정
+
+        // 지도를 터치할 수 있도록 옵션 활성화
+        mMapView.setClickable(true);
+        mMapView.setEnabled(true);
+        mMapView.setFocusable(true);
+        mMapView.setFocusableInTouchMode(true);
+        mMapView.requestFocus();
+        MapContainer.addView(mMapView);
+
+        //create resource provider(오버레이 객체)
+        mMapViewerResourceProvider = new NMapViewerResourceProvider(this); //NMapViewerResourceProvider 클래스 상속
+        mOverlayManager = new NMapOverlayManager(this, mMapView, mMapViewerResourceProvider); //오버레이 객체를 화면에 표시하기 위하여 NMapResourceProvider 클래스를 상속받은 resourceProvider 객체를 전달한다
+        mOverlayManager.setOnCalloutOverlayListener(onCalloutOverlayListener); //
+
+
+        int markerId = NMapPOIflagType.PIN;
+        NMapPOIdata poiData = new NMapPOIdata(2, mMapViewerResourceProvider); //전체 POI 아이템의 개수와 NMapResourceProvider를 상속받은 클래스를 인자로 전달한다.
+        poiData.beginPOIdata(2); //POI 아이템 추가를 시작한다.
+
+        poiData.addPOIitem(Double.parseDouble(recommendStation.getRecommend1().getX()), Double.parseDouble(recommendStation.getRecommend1().getY()), recommendStation.getRecommend1().getStationName(), markerId, 0);
+        poiData.addPOIitem(Double.parseDouble(recommendStation.getRecommend2().getX()), Double.parseDouble(recommendStation.getRecommend2().getY()), recommendStation.getRecommend2().getStationName(), markerId, 0);
+        poiData.addPOIitem(Double.parseDouble(recommendStation.getRecommend3().getX()), Double.parseDouble(recommendStation.getRecommend3().getY()), recommendStation.getRecommend3().getStationName(), markerId, 0);//경도위도 좌표 입력해주면, 그 좌표가 표시됨
+
+        poiData.endPOIdata(); //POI 아이템 추가를 종료한다.
+        NMapPOIdataOverlay poiDataOverlay = mOverlayManager.createPOIdataOverlay(poiData, null); //POI 데이터를 인자로 전달하여 NMapPOIdataOverlay 객체를 생성한다.
+        poiDataOverlay.showAllPOIdata(0); //POI 데이터가 모두 화면에 표시되도록 지도 축척 레벨 및 지도 중심을 변경한다. zoomLevel이 0이 아니면 지정한 지도 축척 레벨에서 지도 중심만 변경한다.
+    }
+
 
     private void dataSetting(){
 
-            final MyListAdapter mMyAdapter = new MyListAdapter();
-            passItem = new MyItem();
+        final MyListAdapter mMyAdapter = new MyListAdapter();
+        passItem = new MyItem();
 
-            mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.list_icon),recommendStation.getRecommend1().getStationName(),"평균소요시간 약" + recommendStation.getAverageTime1() + "분");
-            mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.list_icon),recommendStation.getRecommend2().getStationName() , "평균소요시간 약" + recommendStation.getAverageTime2() + "분");
-            mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.list_icon),recommendStation.getRecommend3().getStationName() , "평균소요시간 약" + recommendStation.getAverageTime3() + "분");
+        mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.list_icon),recommendStation.getRecommend1().getStationName(),"평균소요시간 약" + recommendStation.getAverageTime1() + "분");
+        mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.list_icon),recommendStation.getRecommend2().getStationName() , "평균소요시간 약" + recommendStation.getAverageTime2() + "분");
+        mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.list_icon),recommendStation.getRecommend3().getStationName() , "평균소요시간 약" + recommendStation.getAverageTime3() + "분");
 
-            mListView.setAdapter(mMyAdapter);
+        mListView.setAdapter(mMyAdapter);
 
-            mMyAdapter.selectItem(-1);
+        mMyAdapter.selectItem(-1);
 
-            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                    mMyAdapter.selectItem(position);
-                    passItem = mMyAdapter.getItem(position);
-                }
-            });
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                mMyAdapter.selectItem(position);
+                passItem = mMyAdapter.getItem(position);
+            }
+        });
     }
 
     /********************************************recommend1*********************************************/
@@ -241,14 +290,8 @@ public class SearchActivity extends Activity implements View.OnClickListener{
                     totalTime[2][1] = oDsayData.getJson().getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONObject("info").getInt("totalTime");
                     recommendStation.setAverageTime3((int)((totalTime[2][0] + totalTime[2][1]) / 2));
                     processingDialog.dismiss();
+                    settingMap();
                     dataSetting();
-
-                    //intent!!!!!!!!!!!!!!1- 실제로는 선택한것 넣어야 함 recommend저거
-//                    Intent intent = new Intent(SearchActivity.this, DetailActivity.class);
-//                    intent.putExtra("start",start1);
-//                    intent.putExtra("end",recommendStation.getRecommend2());
-//                    startActivity(intent);
-
                 }catch (JSONException e) {
                     e.printStackTrace();
                 }}
@@ -308,3 +351,4 @@ public class SearchActivity extends Activity implements View.OnClickListener{
         odsayService.requestSearchStation(recommendStation.getRecommend3().getStationName(), "1000", "2", "","","", searchStationPointListener3);
     }
 }
+

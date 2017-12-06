@@ -42,18 +42,15 @@ public class DetailActivity extends Activity {
 
         route = new Route();
         detailRoute = new ArrayList<DetailRoute>();
-
         Intent intent = new Intent(this.getIntent());
-
         start = new StationPoint();
         end = new StationPoint();
+
         start   =  (StationPoint)intent.getSerializableExtra("start");
         end   =  (StationPoint)intent.getSerializableExtra("end");
 
         route.setStartStation(start.getStationName());
         route.setEndStation(end.getStationName());
-
-
 
         /* ìœ„ì ¯ê³¼ ë©¤ë²„ë³€ìˆ˜ ì°¸ì¡° íšë“ */
         mListView = (ListView)findViewById(R.id.listView5);
@@ -145,7 +142,10 @@ public class DetailActivity extends Activity {
 
     public void findRoute(){
         //api 호출
-        odsayService.requestSearchPubTransPath(start.getX(),start.getY(), end.getX(), end.getY(),"0","","0", findRouteListener);
+        if(start.getStationName() == end.getStationName()){
+        }else {
+            odsayService.requestSearchPubTransPath(start.getX(), start.getY(), end.getX(), end.getY(), "0", "", "0", findRouteListener);
+        }
     }
 
 }
