@@ -67,9 +67,9 @@ public class DetailActivity extends Activity {
 
         mMyAdapter.addItem("도착역 : ", end.getStationName(), "dd", "dd");
 
-        /* ë¦¬ìŠ¤íŠ¸ë·°ì— ì–´ëŒ‘í„° ë“±ë¡ */
+
         mListView.setAdapter(mMyAdapter);
-        // ì´ˆê¸° ì•„ë¬´ê²ƒë„ ì„ íƒ ì•ˆë˜ì–´ìžˆê²Œ í•˜ê¸°ìœ„í•´
+
         mMyAdapter.selectItem(-1);
     }
 

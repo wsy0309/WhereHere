@@ -61,6 +61,10 @@ public class SearchActivity extends NMapActivity implements View.OnClickListener
 
         totalTime = new double[3][2];
 
+        MapContainer =(LinearLayout) findViewById(R.id.map_view);
+        // 네이버 지도 객체 생성
+        mMapView = new NMapView(this);
+
         Intent getIntent = new Intent(this.getIntent());
         start1 = (StationPoint) getIntent.getSerializableExtra("start1");
         start2 = (StationPoint) getIntent.getSerializableExtra("start2");
@@ -107,15 +111,12 @@ public class SearchActivity extends NMapActivity implements View.OnClickListener
     }
 
     private void settingMap(){
-        MapContainer =(LinearLayout) findViewById(R.id.map_view);
 
-        // 네이버 지도 객체 생성
-        mMapView = new NMapView(this);
+        MapContainer.addView(mMapView);
+        mMapView.setClientId(getString(R.string.CLIENT_ID)); // 클라이언트 아이디 값 설정
+
         // 지도 객체로부터 컨트롤러 추출
         mMapController = mMapView.getMapController();
-
-
-        mMapView.setClientId(getString(R.string.CLIENT_ID)); // 클라이언트 아이디 값 설정
 
         // 지도를 터치할 수 있도록 옵션 활성화
         mMapView.setClickable(true);
@@ -123,7 +124,6 @@ public class SearchActivity extends NMapActivity implements View.OnClickListener
         mMapView.setFocusable(true);
         mMapView.setFocusableInTouchMode(true);
         mMapView.requestFocus();
-        MapContainer.addView(mMapView);
 
         //create resource provider(오버레이 객체)
         mMapViewerResourceProvider = new NMapViewerResourceProvider(this); //NMapViewerResourceProvider 클래스 상속
