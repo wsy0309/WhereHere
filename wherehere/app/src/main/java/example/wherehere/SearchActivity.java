@@ -36,6 +36,8 @@ public class SearchActivity extends NMapActivity implements View.OnClickListener
     private NMapOverlayManager mOverlayManager; //지도 위에 표시되는 오버레이 객체를 관리한다.
     private NMapOverlayManager.OnCalloutOverlayListener onCalloutOverlayListener; //말풍선 오버레이 객체 생성 시 호출되는 콜백 인터페이스를 정의한다.
 
+    private ImageSelector imageSelector;
+
     private double[][] totalTime;
 
     private ListView mListView;
@@ -58,6 +60,8 @@ public class SearchActivity extends NMapActivity implements View.OnClickListener
         odsayService = ODsayService.init(this, getString(R.string.odsay_key));
         odsayService.setReadTimeout(5000);
         odsayService.setConnectionTimeout(5000);
+
+        imageSelector = new ImageSelector();
 
         totalTime = new double[3][2];
 
@@ -150,9 +154,12 @@ public class SearchActivity extends NMapActivity implements View.OnClickListener
         final MyListAdapter mMyAdapter = new MyListAdapter();
         passItem = new MyItem();
 
-        mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.list_icon),recommendStation.getRecommend1().getStationName(),"평균소요시간 약" + recommendStation.getAverageTime1() + "분");
-        mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.list_icon),recommendStation.getRecommend2().getStationName() , "평균소요시간 약" + recommendStation.getAverageTime2() + "분");
-        mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), R.drawable.list_icon),recommendStation.getRecommend3().getStationName() , "평균소요시간 약" + recommendStation.getAverageTime3() + "분");
+        int id = imageSelector.selectImage(recommendStation.getRecommend1());
+        int id2 = imageSelector.selectImage(recommendStation.getRecommend2());
+        int id3 = imageSelector.selectImage(recommendStation.getRecommend3());
+        mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id),recommendStation.getRecommend1().getStationName(),"평균소요시간 약" + recommendStation.getAverageTime1() + "분");
+        mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id2),recommendStation.getRecommend2().getStationName() , "평균소요시간 약" + recommendStation.getAverageTime2() + "분");
+        mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id3),recommendStation.getRecommend3().getStationName() , "평균소요시간 약" + recommendStation.getAverageTime3() + "분");
 
         mListView.setAdapter(mMyAdapter);
 
