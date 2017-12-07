@@ -81,13 +81,13 @@ public class DetailActivity extends Activity {
             }else if(tmp.getTrafficType() == 3){ // 도보
                 id = R.drawable.pin_ballon_bg;
                 if(i == 0){
-                    mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id), "",route.getStartStation(), route.getDetailRoute().get(i+1).getEndName(), tmp.getSectionTime(), Integer.toString((int)tmp.getDistance()));
+                    mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id), "",route.getStartStation(), route.getDetailRoute().get(i+1).getStartName(), tmp.getSectionTime(), Integer.toString((int)tmp.getDistance()));
 
                 }else if(i == len-1){
-                    mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id), "",route.getDetailRoute().get(i-1).getStartName(), route.getEndStation(), tmp.getSectionTime(), Integer.toString((int)tmp.getDistance()));
+                    mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id), "",route.getDetailRoute().get(i-1).getEndName(), route.getEndStation(), tmp.getSectionTime(), Integer.toString((int)tmp.getDistance()));
 
                 }else{
-                    mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id), "",route.getDetailRoute().get(i-1).getStartName(), route.getDetailRoute().get(i+1).getEndName(), tmp.getSectionTime(), Double.toString(tmp.getDistance()));
+                    mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id), "",route.getDetailRoute().get(i-1).getEndName(), route.getDetailRoute().get(i+1).getStartName(), tmp.getSectionTime(), Double.toString(tmp.getDistance()));
 
                 }
             }

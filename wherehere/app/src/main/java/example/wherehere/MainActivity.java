@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 
 import java.io.BufferedReader;
@@ -27,13 +28,13 @@ public class MainActivity extends Activity {
         //ì´ë¯¸ì§€ í´ë¦­í•˜ë©´ ì•¡í‹°ë¹„í‹° ë³€í™˜
         ImageView iv = new ImageView(this);
         iv.setBackgroundResource(R.drawable.intro_image);
-//        iv.setOnClickListener(new View.OnClickListener(){
-//            public  void onClick(View v){
-//                Intent intent = new Intent(MainActivity.this,AddActivity.class);
-//                startActivity(intent);
-//                finish();
-//            }
-//        });
+        iv.setOnClickListener(new View.OnClickListener(){
+            public  void onClick(View v){
+                Intent intent = new Intent(MainActivity.this,AddActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         setContentView(iv);
 
@@ -55,10 +56,6 @@ public class MainActivity extends Activity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        Intent intent = new Intent(MainActivity.this,AddActivity.class);
-        startActivity(intent);
-        finish();
     }
 
     private void setStringArrayPref(Context context, String key, ArrayList<String> values) {
