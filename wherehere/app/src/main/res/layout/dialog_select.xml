@@ -1,59 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#fff"
+    android:layout_width="wrap_content"
+    android:layout_height="290dp"
     android:orientation="vertical"
+    android:gravity="center_horizontal"
     >
-
-    <TextView
-        android:text="출발지를 선택해주세요"
-        android:textSize="16sp"
-        android:textColor="#000"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="17dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-    <ListView
-        android:id="@+id/listView4"
-        android:layout_width="match_parent"
-        android:layout_height="133dp"
-        android:layout_below="@+id/textView"></ListView>
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="350dp"
+        android:src="@drawable/selectstart_bg" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="end"
-        android:orientation="horizontal"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:weightSum="10">
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/DialogCancelTv"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:gravity="center"
-            android:text="취소"
-            android:textColor="@color/colorAccent"
-            android:textSize="16sp"
-            />
-        <TextView
-            android:id="@+id/DialogCheckTv"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:gravity="center"
-            android:text="확인"
-            android:textColor="@color/colorAccent"
-            android:textSize="16sp"
-            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="90dp" />
+
+        <ListView
+            android:id="@+id/listView4"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_below="@+id/textView"></ListView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:orientation="horizontal"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:weightSum="10">
+
+            <TextView
+                android:id="@+id/DialogCancelTv"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="2"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="취소"
+                android:textColor="#5d5a58"
+                android:textSize="16sp"
+                />
+            <TextView
+                android:id="@+id/DialogCheckTv"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="3"
+                android:gravity="center"
+                android:text="확인"
+                android:textColor="#5d5a58"
+                android:textSize="16sp"
+                />
+        </LinearLayout>
+
     </LinearLayout>
-</LinearLayout>
+
+
+
+</FrameLayout>

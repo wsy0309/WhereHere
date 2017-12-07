@@ -2,6 +2,8 @@ package example.wherehere;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -24,6 +26,7 @@ public class AddDialog extends Dialog implements View.OnClickListener {
 
     public AddDialog(@NonNull Context context){
         super(context);
+        getWindow().setBackgroundDrawable(new ColorDrawable((Color.TRANSPARENT)));
         this.context = context;
     }
 

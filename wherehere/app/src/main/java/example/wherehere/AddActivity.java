@@ -3,6 +3,8 @@ package example.wherehere;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -115,6 +117,8 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
                 }else {
                     ErrorDialog dialog = new ErrorDialog(this);
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); // 테두리 지움
+                    dialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.errordialogbg)); // 이미지 넣기
                     dialog.show();
                 }
                 break;

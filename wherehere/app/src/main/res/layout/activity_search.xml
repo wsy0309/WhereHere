@@ -7,16 +7,14 @@
     android:orientation="vertical"
     android:gravity="center_horizontal"
     tools:context="example.wherehere.SearchActivity"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:background="@drawable/background">
 
-    <TextView
-        android:id="@+id/textView"
+    <ImageView
+        android:id="@+id/imageView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.19"
-        android:gravity="center"
-        android:text="추천역 리스트"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        android:layout_height="56dp"
+        android:src="@drawable/selectrecom_bar" />
 
     <ListView
         android:id="@+id/listView3"

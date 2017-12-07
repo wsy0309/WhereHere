@@ -2,6 +2,8 @@ package example.wherehere;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -32,6 +34,7 @@ public class SelectDialog extends Dialog implements View.OnClickListener {
 
     public SelectDialog(@NonNull Context context, StationPoint start1, StationPoint start2){
         super(context);
+        getWindow().setBackgroundDrawable(new ColorDrawable((Color.TRANSPARENT)));
         this.context = context;
         this.start1 = start1;
         this.start2 = start2;
