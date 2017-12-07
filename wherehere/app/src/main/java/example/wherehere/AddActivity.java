@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -38,6 +39,10 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     private StationPoint start1;
     private StationPoint start2;
 
+    private AutoCompleteTextView autoComplete1;
+    private AutoCompleteTextView autoComplete2;
+    private  AutoTexter autoTexter1;
+    private  AutoTexter autoTexter2;
     @Override
     protected  void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -56,8 +61,14 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         setSupportActionBar(toolbar);
 
         Button button = (Button)findViewById(R.id.insertButton);
-        editText1 = (EditText)findViewById(R.id.editText1);
-        editText2 = (EditText)findViewById(R.id.editText2);
+        autoComplete1 = (AutoCompleteTextView) findViewById(R.id.autoText1);
+        autoComplete2 = (AutoCompleteTextView) findViewById(R.id.autoText2);
+
+        autoTexter1 = new AutoTexter(autoComplete1);
+        autoTexter2 = new AutoTexter(autoComplete2);
+        autoTexter1.autoCompleteText(this);
+        autoTexter2.autoCompleteText(this);
+
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("최근기록"));
@@ -89,8 +100,8 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         switch (v.getId()){
             case R.id.insertButton:
                 //editTextë‚´ìš© ê°€ì ¸ì˜´
-                String getEdit1 = editText1.getText().toString();
-                String getEdit2 = editText2.getText().toString();
+                String getEdit1 = autoComplete1.getText().toString();
+                String getEdit2 = autoComplete2.getText().toString();
 
                 //ê³µë°±(ìŠ¤íŽ˜ì´ìŠ¤ë°”)ë§Œ ëˆŒëŸ¬ì„œ ë„˜ê¸°ëŠ” ê²½ìš°ë„ ì•ˆë¨
                 getEdit1 = getEdit1.trim();
@@ -101,16 +112,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                     start1.setStationName(getEdit1);
                     start2.setStationName(getEdit2);
                     findRecommend();
-//                    Intent intent = new Intent(AddActivity.this,SearchActivity.class);
 
-//                    intent.putExtra("input1",String.valueOf(editText1.getText()));
-//                    intent.putExtra("input2",String.valueOf(editText2.getText()));
-
-                    //ê³„ì‚°ê²°ê³¼ ë„˜ê²¨ì¤„ê±°ë„ ì¶”ê°€í•„ìš”
-                    //intent.putExtra("recommend1",ì¶”ì²œì—­[0]);
-                    //intent.putExtra("recommend2",ì¶”ì²œì—­[1]);
-                    //intent.putExtra("recommend3",ì¶”ì²œì—­[2]);
-//                    startActivity(intent);
                 }else {
                     ErrorDialog dialog = new ErrorDialog(this);
                     dialog.show();

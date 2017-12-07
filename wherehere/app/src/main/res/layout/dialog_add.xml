@@ -20,8 +20,8 @@
         android:paddingBottom="17dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <EditText
-        android:id="@+id/addMarkText"
+    <AutoCompleteTextView
+        android:id="@+id/addAutoText"
         android:layout_width="317dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -29,7 +29,7 @@
         android:layout_alignParentTop="true"
         android:ems="10"
         android:hint="ex) 죽전"
-        android:inputType="textPersonName" />
+        android:completionThreshold="2" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

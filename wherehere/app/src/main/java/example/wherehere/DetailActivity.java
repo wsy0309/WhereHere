@@ -72,7 +72,7 @@ public class DetailActivity extends Activity {
         for(int i = 0; i <len;i++){
             tmp = route.getDetailRoute().get(i);
             if(tmp.getTrafficType() == 1) { //지하철
-                id = R.drawable.icon;
+                id = R.drawable.ic_directions_subway_black_24dp;
                 mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id), tmp.getSubwayID(), tmp.getStartName(), tmp.getEndName(), tmp.getSectionTime(), tmp.getStationCount());
             }else if(tmp.getTrafficType() == 2){ //버스
                 id = R.drawable.ic_map_start_over;

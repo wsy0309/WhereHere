@@ -5,7 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
-import android.widget.EditText;
+import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 
 /**
@@ -18,7 +18,9 @@ public class AddDialog extends Dialog implements View.OnClickListener {
     private Context context;
     private TextView cancelTv;
     private TextView checkTv;
-    private EditText markEt;
+
+    private AutoCompleteTextView autoComplete;
+    private AutoTexter autoTexter;
 
     public AddDialog(@NonNull Context context){
         super(context);
@@ -35,7 +37,9 @@ public class AddDialog extends Dialog implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_add);
 
-        markEt = (EditText) findViewById(R.id.addMarkText);
+        autoComplete = (AutoCompleteTextView) findViewById(R.id.addAutoText);
+        autoTexter = new AutoTexter(autoComplete);
+        autoTexter.autoCompleteText(context);
 
         cancelTv = (TextView) findViewById(R.id.DialogCancelTv);
         checkTv = (TextView) findViewById(R.id.DialogCheckTv);
@@ -52,7 +56,7 @@ public class AddDialog extends Dialog implements View.OnClickListener {
                 cancel();
                 break;
             case R.id.DialogCheckTv:
-                String mark = markEt.getText().toString();
+                String mark = autoComplete.getText().toString();
                 dialogListener.onPositiveClicked(mark);
                 dismiss();
                 break;
