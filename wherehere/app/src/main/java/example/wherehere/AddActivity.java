@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -66,15 +66,20 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         autoComplete1 = (AutoCompleteTextView) findViewById(R.id.autoText1);
         autoComplete2 = (AutoCompleteTextView) findViewById(R.id.autoText2);
 
+        autoComplete1.getBackground().setColorFilter(Color.parseColor("#4C4A48"), PorterDuff.Mode.SRC_ATOP);
+        autoComplete2.getBackground().setColorFilter(Color.parseColor("#4C4A48"), PorterDuff.Mode.SRC_ATOP);
+
         autoTexter1 = new AutoTexter(autoComplete1);
         autoTexter2 = new AutoTexter(autoComplete2);
         autoTexter1.autoCompleteText(this);
         autoTexter2.autoCompleteText(this);
 
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab().setText("최근기록"));
-        tabLayout.addTab(tabLayout.newTab().setText("즐겨찾기°"));
+        final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout.setBackground(getResources().getDrawable(R.drawable.pressed1_tab));
+        tabLayout.addTab(tabLayout.newTab());
+        tabLayout.addTab(tabLayout.newTab());
+
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
@@ -84,7 +89,16 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
+
+                if (tab.getPosition() == 0){
+                    tabLayout.setBackground(getResources().getDrawable(R.drawable.pressed1_tab));
+                }
+                else if (tab.getPosition() == 1){
+                    tabLayout.setBackground(getResources().getDrawable(R.drawable.pressed2_tab));
+                }
+
                 viewPager.setCurrentItem(tab.getPosition());
+
             }
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {}
@@ -117,8 +131,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
                 }else {
                     ErrorDialog dialog = new ErrorDialog(this);
-                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT)); // 테두리 지움
-                    dialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.errordialogbg)); // 이미지 넣기
+
                     dialog.show();
                 }
                 break;

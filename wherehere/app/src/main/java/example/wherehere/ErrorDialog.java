@@ -17,7 +17,6 @@ public class ErrorDialog extends Dialog implements View.OnClickListener{
 
     private MyDialogListener dialogListener;
     private Context context;
-    private TextView cancelTv;
     private TextView checkTv;
 
 
@@ -36,10 +35,8 @@ public class ErrorDialog extends Dialog implements View.OnClickListener{
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_error);
-        cancelTv = (TextView) findViewById(R.id.DialogCancelTv);
         checkTv = (TextView) findViewById(R.id.DialogCheckTv);
 
-        cancelTv.setOnClickListener(this);
         checkTv.setOnClickListener(this);
 
     }
@@ -47,9 +44,6 @@ public class ErrorDialog extends Dialog implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.DialogCancelTv:
-                cancel();
-                break;
             case R.id.DialogCheckTv:
                 dismiss();
                 break;

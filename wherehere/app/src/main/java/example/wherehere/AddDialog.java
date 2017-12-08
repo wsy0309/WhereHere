@@ -3,6 +3,7 @@ package example.wherehere;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -41,6 +42,7 @@ public class AddDialog extends Dialog implements View.OnClickListener {
         setContentView(R.layout.dialog_add);
 
         autoComplete = (AutoCompleteTextView) findViewById(R.id.addAutoText);
+        autoComplete.getBackground().setColorFilter(Color.parseColor("#4C4A48"), PorterDuff.Mode.SRC_ATOP);
         autoTexter = new AutoTexter(autoComplete);
         autoTexter.autoCompleteText(context);
 

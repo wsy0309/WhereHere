@@ -28,12 +28,36 @@ public class ProgressDialog extends Application {
         baseApplication = this;
     }
 
+    public void progressON(Activity activity){
+        if (activity == null || activity.isFinishing()) {
+            return;
+        } else {
+
+            progressDialog = new AppCompatDialog(activity);
+            progressDialog.setCancelable(false);
+            progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            progressDialog.setContentView(R.layout.recommend_loading);
+            progressDialog.show();
+
+        }
+
+        final ImageView img_loading_frame = (ImageView) progressDialog.findViewById(R.id.iv_frame_loading);
+
+        final AnimationDrawable frameAnimation = (AnimationDrawable) img_loading_frame.getBackground();
+        img_loading_frame.post(new Runnable() {
+            @Override
+            public void run() {
+                frameAnimation.start();
+            }
+        });
+
+    }
+
     public void progressON(Activity activity, String message) {
 
         if (activity == null || activity.isFinishing()) {
             return;
         }
-
 
         if (progressDialog != null && progressDialog.isShowing()) {
             progressSET(message);
@@ -49,6 +73,7 @@ public class ProgressDialog extends Application {
 
 
         final ImageView img_loading_frame = (ImageView) progressDialog.findViewById(R.id.iv_frame_loading);
+
         final AnimationDrawable frameAnimation = (AnimationDrawable) img_loading_frame.getBackground();
         img_loading_frame.post(new Runnable() {
             @Override

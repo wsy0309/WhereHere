@@ -156,9 +156,9 @@ public class MyListAdapter extends BaseAdapter {
         /* 리스트 선택시 색변경 유지 */
         int type = getItemSelectedType(position);
         if(type == TAG_SELECTED) {
-            convertView.setBackgroundColor(Color.parseColor("#F1C40F"));
+            convertView.setBackgroundColor(Color.parseColor("#bdc3c7"));
         } else {
-            convertView.setBackgroundColor(Color.parseColor("#BDC3C7"));
+            convertView.setBackgroundColor(Color.parseColor("#00000000"));
         }
 
         return convertView;
@@ -231,8 +231,8 @@ public class MyListAdapter extends BaseAdapter {
 
         mItem.setType(ITEM_VIEW_TYPE_DETAIL_2);
         mItem.setTypeImg(img);
-        mItem.setTypeNum(str1);
-        mItem.setSubStart(str2);
+        mItem.setTypeNum(str2);
+        mItem.setSubStart(str1);
         mItem.setSubEnd(str3);
         mItem.setSubTime(str4);
         mItem.setSubDist(str5);

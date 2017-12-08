@@ -13,9 +13,12 @@
 
     <ListView
         android:id="@+id/listView5"
-        android:layout_width="match_parent"
+        android:layout_width="350dp"
         android:layout_height="370dp"
+        android:dividerHeight="2dp"
+        android:divider="#aaaaaa"
         android:layout_below="@+id/textView"
+        android:layout_gravity="center"
         android:layout_weight="0.52"></ListView>
 
 </LinearLayout>

@@ -6,27 +6,32 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="95dp"
         android:orientation="horizontal"
         android:weightSum="1">
 
         <ImageView
             android:id="@+id/typeImg"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="15dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:orientation="vertical"
+            android:layout_gravity="center"
             android:weightSum="1">
 
+
             <TextView
-                android:id="@+id/numText"
-                android:layout_width="75dp"
+                android:id="@+id/subStartText"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="분당선"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:text="기흥역"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:gravity="center"/>
 
             <LinearLayout
@@ -36,31 +41,23 @@
                 android:weightSum="1">
 
                 <TextView
-                    android:id="@+id/subStartText"
+                    android:id="@+id/numText"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_weight="0.10"
                     android:gravity="center"
-                    android:text="기흥역"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    android:layout_weight="0.10" />
+                    android:text="분당선"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
-                <TextView
-                    android:id="@+id/Text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="->"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    android:layout_weight="0.05" />
 
                 <TextView
                     android:id="@+id/subEndText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_weight="0.15"
                     android:gravity="center"
                     android:text="서현역"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    android:layout_weight="0.15" />
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             </LinearLayout>
 
@@ -74,17 +71,18 @@
                 <TextView
                     android:id="@+id/subTimeText"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="총 시간:34분"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:layout_height="match_parent"
+                    android:text="약 34분"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:gravity="center"
                     android:layout_weight="0.12" />
+
                 <TextView
                     android:id="@+id/subNum"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="총 시간:34분"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:layout_height="match_parent"
+                    android:text="5개 정류장"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"
                     android:gravity="center"
                     android:layout_weight="0.22" />
 

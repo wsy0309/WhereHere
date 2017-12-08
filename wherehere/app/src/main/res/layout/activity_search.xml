@@ -18,33 +18,39 @@
 
     <ListView
         android:id="@+id/listView3"
-        android:layout_width="350dp"
-        android:layout_height="196dp"
+        android:layout_width="330dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="10dp"
         android:layout_below="@+id/textView"
+        android:dividerHeight="2dp"
+        android:divider="#aaaaaa"
         android:layout_weight="0.04"></ListView>
+
+    <Button
+        android:id="@+id/detailButton"
+        android:layout_width="120dp"
+        android:layout_height="45dp"
+        android:layout_weight="0.14"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/showdetail_button_selector"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="270dp"
+        android:layout_height="wrap_content"
         android:gravity="center_horizontal">
 
         <LinearLayout
             android:id="@+id/map_view"
             android:layout_width="300dp"
             android:layout_height="250dp"
-            android:orientation="vertical">
+            android:layout_margin="10dp"
+            android:orientation="vertical"
+            android:background="@drawable/border">
 
         </LinearLayout>
 
     </LinearLayout>
 
-
-
-    <Button
-        android:id="@+id/detailButton"
-        android:layout_width="149dp"
-        android:layout_height="47dp"
-        android:layout_weight="0.14"
-        android:text="경로보기" />
 
 </LinearLayout>

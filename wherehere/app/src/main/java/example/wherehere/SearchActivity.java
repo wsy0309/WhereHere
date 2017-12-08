@@ -26,7 +26,7 @@ import org.json.JSONException;
  * Created by user on 2017-12-04.
  */
 
-public class SearchActivity extends NMapActivity implements View.OnClickListener{
+public class SearchActivity extends NMapActivity implements View.OnClickListener,StartProgress{
     private ODsayService odsayService;
 
     NMapController mMapController = null;
@@ -44,7 +44,7 @@ public class SearchActivity extends NMapActivity implements View.OnClickListener
     private StationPoint start1;
     private StationPoint start2;
     private RecommendStation recommendStation;
-    ProcessingDialog processingDialog;
+
 
     private MyItem passItem;
 
@@ -53,8 +53,7 @@ public class SearchActivity extends NMapActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        processingDialog = new ProcessingDialog(this);
-        processingDialog.show();
+        progressON();
 
         //API 설정 초기화
         odsayService = ODsayService.init(this, getString(R.string.odsay_key));
@@ -157,9 +156,9 @@ public class SearchActivity extends NMapActivity implements View.OnClickListener
         int id = imageSelector.selectImage(recommendStation.getRecommend1());
         int id2 = imageSelector.selectImage(recommendStation.getRecommend2());
         int id3 = imageSelector.selectImage(recommendStation.getRecommend3());
-        mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id),recommendStation.getRecommend1().getStationName(),"평균소요시간 약" + recommendStation.getAverageTime1() + "분");
-        mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id2),recommendStation.getRecommend2().getStationName() , "평균소요시간 약" + recommendStation.getAverageTime2() + "분");
-        mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id3),recommendStation.getRecommend3().getStationName() , "평균소요시간 약" + recommendStation.getAverageTime3() + "분");
+        mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id),recommendStation.getRecommend1().getStationName(),"평균 : 약 " + recommendStation.getAverageTime1() + "분");
+        mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id2),recommendStation.getRecommend2().getStationName() , "평균 : 약 " + recommendStation.getAverageTime2() + "분");
+        mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id3),recommendStation.getRecommend3().getStationName() , "평균 : 약 " + recommendStation.getAverageTime3() + "분");
 
         mListView.setAdapter(mMyAdapter);
 
@@ -296,7 +295,8 @@ public class SearchActivity extends NMapActivity implements View.OnClickListener
                 try {
                     totalTime[2][1] = oDsayData.getJson().getJSONObject("result").getJSONArray("path").getJSONObject(0).getJSONObject("info").getInt("totalTime");
                     recommendStation.setAverageTime3((int)((totalTime[2][0] + totalTime[2][1]) / 2));
-                    processingDialog.dismiss();
+                    progressOFF();
+
                     settingMap();
                     dataSetting();
                 }catch (JSONException e) {
@@ -356,6 +356,21 @@ public class SearchActivity extends NMapActivity implements View.OnClickListener
     public void findAverageTime3(){
         //api 호출
         odsayService.requestSearchStation(recommendStation.getRecommend3().getStationName(), "1000", "2", "","","", searchStationPointListener3);
+    }
+
+    @Override
+    public void progressON() {
+        ProgressDialog.getInstance().progressON(this);
+    }
+
+    @Override
+    public void progressON(String message) {
+        ProgressDialog.getInstance().progressON(this, message);
+    }
+
+    @Override
+    public void progressOFF() {
+        ProgressDialog.getInstance().progressOFF();
     }
 }
 

@@ -66,7 +66,7 @@ public class DetailActivity extends Activity implements StartProgress{
 
         final MyListAdapter mMyAdapter = new MyListAdapter();
 
-        mMyAdapter.addItem("출발역 :", start.getStationName(), Integer.toString(route.getTotalTime()), Integer.toString(route.getPayment()));
+        mMyAdapter.addItem(start.getStationName(), end.getStationName(), Integer.toString(route.getTotalTime()), Integer.toString(route.getPayment()));
 
         DetailRoute tmp;
         int len = route.getDetailRoute().size();
@@ -75,28 +75,25 @@ public class DetailActivity extends Activity implements StartProgress{
             tmp = route.getDetailRoute().get(i);
             if(tmp.getTrafficType() == 1) { //지하철
                 id = R.drawable.subway_icon;
-                mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id), tmp.getSubwayID(), tmp.getStartName(), tmp.getEndName(), tmp.getSectionTime(), tmp.getStationCount());
+                mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id), tmp.getStartName() + "역", tmp.getSubwayID() + "승차 후, ", tmp.getEndName()+ "역 하차", "약 " + tmp.getSectionTime() + "분", tmp.getStationCount() + "개 역");
             }else if(tmp.getTrafficType() == 2){ //버스
                 id = R.drawable.bus_icon;
-                mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id), tmp.getBusID(), tmp.getStartName(), tmp.getEndName(), tmp.getSectionTime(), tmp.getStationCount());
+                mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id), tmp.getStartName() + "정류장", tmp.getBusID() + "승차 후, ", tmp.getEndName() + "정류장 하차", "약 " + tmp.getSectionTime() + "분", tmp.getStationCount() + "개 정류장");
 
             }else if(tmp.getTrafficType() == 3){ // 도보
                 id = R.drawable.walk_icon;
                 if(i == 0){
-                    mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id), "",route.getStartStation(), route.getDetailRoute().get(i+1).getStartName(), tmp.getSectionTime(), Integer.toString((int)tmp.getDistance()));
+                    mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id), "",route.getStartStation() + "에서 ", route.getDetailRoute().get(i+1).getStartName() + "까지", "약 " + tmp.getSectionTime() + "분", "약 " +Integer.toString((int)tmp.getDistance()) + "m 걷기");
 
                 }else if(i == len-1){
-                    mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id), "",route.getDetailRoute().get(i-1).getEndName(), route.getEndStation(), tmp.getSectionTime(), Integer.toString((int)tmp.getDistance()));
+                    mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id), "",route.getDetailRoute().get(i-1).getEndName() + "에서 ",route.getEndStation() + "까지", "약 " + tmp.getSectionTime() + "분" , "약 " + Integer.toString((int)tmp.getDistance()) + "m 걷기");
 
                 }else{
-                    mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id), "",route.getDetailRoute().get(i-1).getEndName(), route.getDetailRoute().get(i+1).getStartName(), tmp.getSectionTime(), Double.toString(tmp.getDistance()));
+                    mMyAdapter.addItem(ContextCompat.getDrawable(getApplicationContext(), id), "",route.getDetailRoute().get(i-1).getEndName() + "에서", route.getDetailRoute().get(i+1).getStartName() + "까지", "약 " + tmp.getSectionTime() + "분", "약 " + Double.toString(tmp.getDistance()) + "m 걷기");
 
                 }
             }
         }
-        mMyAdapter.addItem("도착역 : ", end.getStationName(), "", "");
-
-
         mListView.setAdapter(mMyAdapter);
 
         mMyAdapter.selectItem(-1);
@@ -181,7 +178,7 @@ public class DetailActivity extends Activity implements StartProgress{
 
     @Override
     public void progressON() {
-        ProgressDialog.getInstance().progressON(this, null);
+        ProgressDialog.getInstance().progressON(this);
     }
 
     @Override
