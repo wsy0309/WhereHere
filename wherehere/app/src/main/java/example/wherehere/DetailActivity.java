@@ -21,7 +21,7 @@ import java.util.ArrayList;
  * Created by user on 2017-12-04.
  */
 
-public class DetailActivity extends Activity {
+public class DetailActivity extends Activity implements StartProgress{
     private ODsayService odsayService;
 
     private ListView mListView;
@@ -35,6 +35,8 @@ public class DetailActivity extends Activity {
     protected  void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        progressON("Loading...");
 
         //API 설정 초기화
         odsayService = ODsayService.init(this, getString(R.string.odsay_key));
@@ -153,6 +155,8 @@ public class DetailActivity extends Activity {
                     route.setTotalTime(infoObject.getInt("totalTime") - error);
                     route.setPayment(infoObject.getInt("payment"));
 
+                    progressOFF();
+
                     dataSetting();
                 }catch (JSONException e) {
                     e.printStackTrace();
@@ -175,4 +179,18 @@ public class DetailActivity extends Activity {
         }
     }
 
+    @Override
+    public void progressON() {
+        ProgressDialog.getInstance().progressON(this, null);
+    }
+
+    @Override
+    public void progressON(String message) {
+        ProgressDialog.getInstance().progressON(this, message);
+    }
+
+    @Override
+    public void progressOFF() {
+        ProgressDialog.getInstance().progressOFF();
+    }
 }

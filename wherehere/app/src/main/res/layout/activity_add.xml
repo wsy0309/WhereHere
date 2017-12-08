@@ -16,39 +16,59 @@
         android:layout_height="56dp"
         app:srcCompat="@drawable/enterstart_bar" />
 
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        app:srcCompat="@drawable/addactivity_explain3" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="130dp"
         android:orientation="horizontal">
+
 
         <LinearLayout
             android:layout_width="250dp"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="28dp" />
+
+
             <AutoCompleteTextView
                 android:id="@+id/autoText1"
-                android:layout_width="fill_parent"
+                android:layout_width="230dp"
                 android:layout_height="wrap_content"
-                android:hint="내위치역"
-                android:completionThreshold="2" />
+                android:completionThreshold="2"
+                android:layout_gravity="right"
+                android:hint="역을 입력하세요"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="5dp" />
+
             <AutoCompleteTextView
                 android:id="@+id/autoText2"
-                android:layout_width="fill_parent"
+                android:layout_width="230dp"
                 android:layout_height="wrap_content"
-                android:hint="너위치역"
-                android:completionThreshold="2" />
+                android:completionThreshold="2"
+                android:layout_gravity="right"
+                android:hint="역을 입력하세요" />
         </LinearLayout>
+
         <Button
             android:id="@+id/insertButton"
             android:layout_width="119dp"
             android:layout_height="104dp"
-            android:layout_alignBottom="@+id/editText2"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="14dp"
-            android:layout_marginStart="14dp"
-            android:layout_toEndOf="@+id/editText1"
-            android:layout_toRightOf="@+id/editText1"
+            android:layout_marginRight="14dp"
+            android:layout_marginLeft="7dp"
+
+            android:layout_gravity="bottom|left"
             android:layout_weight="0.01"
             android:text="입력" />
     </LinearLayout>
@@ -65,32 +85,32 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignTop="@+id/tab_layout"
                 android:background="?attr/colorPrimary"
                 android:elevation="6dp"
                 android:minHeight="?attr/actionBarSize"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                android:layout_alignTop="@+id/tab_layout"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="38dp"
                 android:background="?attr/colorPrimary"
                 android:elevation="6dp"
                 android:minHeight="?attr/actionBarSize"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                android:layout_marginTop="38dp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
             <android.support.v4.view.ViewPager
                 android:id="@+id/pager"
                 android:layout_width="match_parent"
                 android:layout_height="fill_parent"
-                android:layout_below="@id/tab_layout"/>
+                android:layout_below="@id/tab_layout" />
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>
