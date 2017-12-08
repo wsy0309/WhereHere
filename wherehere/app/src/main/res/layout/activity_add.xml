@@ -25,6 +25,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="160dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="horizontal">
 
 

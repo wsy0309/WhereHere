@@ -19,6 +19,7 @@ import com.odsay.odsayandroidsdk.API;
 import com.odsay.odsayandroidsdk.ODsayData;
 import com.odsay.odsayandroidsdk.ODsayService;
 import com.odsay.odsayandroidsdk.OnResultCallbackListener;
+import com.tsengvn.typekit.TypekitContextWrapper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -274,5 +275,10 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         odsayService.requestSearchStation(start1.getStationName(), "1000", "2", "","","", searchStationPointListener);
     }
 
+    @Override protected void attachBaseContext(Context newBase) {
+
+        super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
+
+    }
 }
 

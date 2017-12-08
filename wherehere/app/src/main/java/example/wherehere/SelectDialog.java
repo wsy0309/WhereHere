@@ -72,7 +72,7 @@ public class SelectDialog extends Dialog implements View.OnClickListener {
                 cancel();
                 break;
             case R.id.DialogCheckTv:
-                /* Listenerë¡œ ë“±ë¡í•œ ê°ì²´ê°€ ìžˆìœ¼ë©´ í˜¸ì¶œ */
+
                 dialogListener.onPositiveClicked(passItem);
                 dismiss();
                 break;

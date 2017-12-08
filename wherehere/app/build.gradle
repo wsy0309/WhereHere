@@ -31,4 +31,5 @@ dependencies {
     compile project(':SDK_release_v1.0')
     compile files('libs/json-simple-1.1.1.jar')
     compile 'com.naver.maps.open:naver-map-api:2.1.2@aar'
+    compile 'com.tsengvn:Typekit:1.0.0'
 }

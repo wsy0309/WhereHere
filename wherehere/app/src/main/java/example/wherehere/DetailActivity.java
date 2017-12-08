@@ -1,6 +1,7 @@
 package example.wherehere;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -10,6 +11,7 @@ import com.odsay.odsayandroidsdk.API;
 import com.odsay.odsayandroidsdk.ODsayData;
 import com.odsay.odsayandroidsdk.ODsayService;
 import com.odsay.odsayandroidsdk.OnResultCallbackListener;
+import com.tsengvn.typekit.TypekitContextWrapper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -185,9 +187,14 @@ public class DetailActivity extends Activity implements StartProgress{
     public void progressON(String message) {
         ProgressDialog.getInstance().progressON(this, message);
     }
-
     @Override
     public void progressOFF() {
         ProgressDialog.getInstance().progressOFF();
+    }
+
+    @Override protected void attachBaseContext(Context newBase) {
+
+        super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
+
     }
 }
