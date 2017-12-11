@@ -34,6 +34,9 @@ public class AddDialog extends Dialog implements View.OnClickListener {
     public void setDialogListener(MyDialogListener dialogListener){
         this.dialogListener = dialogListener;
     }
+    int getOKButtonId(){
+        return R.id.DialogCheckTv;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.nhn.android.maps.NMapActivity;
 import com.nhn.android.maps.NMapController;
@@ -88,31 +90,43 @@ public class SearchActivity extends NMapActivity implements View.OnClickListener
     public void onClick(View v){
         switch (v.getId()) {
             case R.id.detailButton:
-
-                SelectDialog dialog = new SelectDialog(this,start1,start2);
-                dialog.setDialogListener(new MyDialogListener() {  // MyDialogListener ë¥¼ êµ¬í˜„
-                    @Override
-                    public void onPositiveClicked(MyItem myItem) {
-                        Intent intent = new Intent(SearchActivity.this, DetailActivity.class);
-                        if(passItem.getRecomText() == recommendStation.getRecommend1().getStationName()){
-                            intent.putExtra("start",recommendStation.getRecommend1());
-                        }else if(passItem.getRecomText() == recommendStation.getRecommend2().getStationName()){
-                            intent.putExtra("start",recommendStation.getRecommend2());
-                        }else if(passItem.getRecomText() == recommendStation.getRecommend3().getStationName()){
-                            intent.putExtra("start",recommendStation.getRecommend3());
+                if(passItem.getRecomText() == null){
+                    Toast toast = Toast.makeText(getApplicationContext(), "추천역을 선택해주세요.", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.BOTTOM, 0, 300);
+                    toast.show();
+                    break;
+                }else{
+                    SelectDialog dialog = new SelectDialog(this,start1,start2);
+                    dialog.setDialogListener(new MyDialogListener() {  // MyDialogListener ë¥¼ êµ¬í˜„
+                        @Override
+                        public void onPositiveClicked(MyItem myItem) {
+                            if(myItem.getStartText() == null){
+                                Toast toast = Toast.makeText(getApplicationContext(), "출발역을 선택해주세요.", Toast.LENGTH_SHORT);
+                                toast.setGravity(Gravity.BOTTOM, 0, 300);
+                                toast.show();
+                            }else{
+                                Intent intent = new Intent(SearchActivity.this, DetailActivity.class);
+                                if(passItem.getRecomText() == recommendStation.getRecommend1().getStationName()){
+                                    intent.putExtra("start",recommendStation.getRecommend1());
+                                }else if(passItem.getRecomText() == recommendStation.getRecommend2().getStationName()){
+                                    intent.putExtra("start",recommendStation.getRecommend2());
+                                }else if(passItem.getRecomText() == recommendStation.getRecommend3().getStationName()){
+                                    intent.putExtra("start",recommendStation.getRecommend3());
+                                }
+                                if(myItem.getStartText() == start1.getStationName()){
+                                    intent.putExtra("end", start1);
+                                }else if(myItem.getStartText() == start2.getStationName()){
+                                    intent.putExtra("end", start2);
+                                }
+                                startActivity(intent);
+                            }
                         }
-                        if(myItem.getStartText() == start1.getStationName()){
-                            intent.putExtra("end", start1);
-                        }else if(myItem.getStartText() == start2.getStationName()){
-                            intent.putExtra("end", start2);
-                        }
-                        startActivity(intent);
-                    }
-                    @Override
-                    public void onPositiveClicked(String station) {}
-                });
-                dialog.show();
-                break;
+                        @Override
+                        public void onPositiveClicked(String station) {}
+                    });
+                    dialog.show();
+                    break;
+                }
         }
     }
 
@@ -375,10 +389,9 @@ public class SearchActivity extends NMapActivity implements View.OnClickListener
         ProgressDialog.getInstance().progressOFF();
     }
 
-    @Override protected void attachBaseContext(Context newBase) {
-
+    @Override
+    protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(TypekitContextWrapper.wrap(newBase));
-
     }
 }
 
