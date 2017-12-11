@@ -46,6 +46,10 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     private AutoCompleteTextView autoComplete2;
     private  AutoTexter autoTexter1;
     private  AutoTexter autoTexter2;
+
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
+
     @Override
     protected  void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -116,16 +120,53 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
         switch (v.getId()){
             case R.id.insertButton:
-                //editTextë‚´ìš© ê°€ì ¸ì˜´
+                //editText내용 가져옴
                 String getEdit1 = autoComplete1.getText().toString();
                 String getEdit2 = autoComplete2.getText().toString();
 
-                //ê³µë°±(ìŠ¤íŽ˜ì´ìŠ¤ë°”)ë§Œ ëˆŒëŸ¬ì„œ ë„˜ê¸°ëŠ” ê²½ìš°ë„ ì•ˆë¨
+                //공백(스페이스바)만 눌러서 넘기는 경우도 안됨
                 getEdit1 = getEdit1.trim();
                 getEdit2 = getEdit2.trim();
 
-                //ë‘˜ë‹¤ ë¹ˆê°’ì´ ì—†ì„ë•Œ
+                //둘다 빈값이 없을때
                 if((getEdit1.getBytes().length > 0) && (getEdit2.getBytes().length > 0)){
+
+                    preferences = getSharedPreferences("RECENT_RECORD", MODE_PRIVATE);
+                    editor = preferences.edit();
+
+
+                    ArrayList<String> pref = new ArrayList<String>();
+                    int pref_size = 0;
+
+                    //현재 sharedpreference에 있는 값을 다 가져와서 지움
+                    while(preferences.getString("key"+pref_size,"") != ""){
+                        pref.add(preferences.getString("key"+pref_size,""));
+                        pref_size++;
+                    }
+                    //만약에 editText1값이 sharedpreference에 없으면
+                    if (!pref.contains(autoComplete1.getText().toString())){
+                        //만약에 editText2값도 sharedpreference에 없으면
+                        if (!pref.contains(autoComplete2.getText().toString())) {
+                            editor.putString("key0", autoComplete1.getText().toString());
+                            editor.putString("key1", autoComplete2.getText().toString());
+                            //key 3 부터 채우기
+                            for (int i = 2; i < (pref_size + 2); i++) {
+                                editor.putString("key" + i, pref.get(i - 2));
+                            }
+                        }
+                        //editText1값만 sharedpreference에 없으면
+                        else {
+                            editor.putString("key0",autoComplete1.getText().toString());
+                            for(int i = 1; i < (pref_size + 1);i++){
+                                editor.putString("key"+i,pref.get(i-1));
+                            }
+                        }
+                    }
+                    editor.commit();
+
+
+
+
                     start1.setStationName(getEdit1);
                     start2.setStationName(getEdit2);
                     findRecommend();

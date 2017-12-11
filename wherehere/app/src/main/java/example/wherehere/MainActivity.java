@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //ì´ë¯¸ì§€ í´ë¦­í•˜ë©´ ì•¡í‹°ë¹„í‹° ë³€í™˜
+
         ImageView iv = new ImageView(this);
         iv.setBackgroundResource(R.drawable.intro_image);
         iv.setOnClickListener(new View.OnClickListener(){

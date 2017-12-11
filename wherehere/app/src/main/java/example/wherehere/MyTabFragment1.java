@@ -1,5 +1,6 @@
 package example.wherehere;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,11 +10,17 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Created by user on 2017-12-04.
  */
 
 public class MyTabFragment1 extends Fragment {
+
+    private ListView mListView;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
 
     public MyTabFragment1() {
         super();
@@ -23,22 +30,30 @@ public class MyTabFragment1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.activity_tab1, container, false);
+        mListView = (ListView) view.findViewById(R.id.listView1);
 
-        ListView mListView;
         final MyListAdapter myListAdapter;
         myListAdapter = new MyListAdapter();
 
-        mListView = (ListView) view.findViewById(R.id.listView1);
-        myListAdapter.selectItem(-1);
+        preferences = this.getActivity().getSharedPreferences("RECENT_RECORD", MODE_PRIVATE);
+        editor = preferences.edit();
 
-        ArrayList<String> myArrayList = new ArrayList<>();
-        myArrayList.add("ìµœê·¼ê¸°ë¡ 1");
-        myArrayList.add("ìµœê·¼ê¸°ë¡ 2");
-        myArrayList.add("ìµœê·¼ê¸°ë¡ 3");
-        for (int i = 0; i < 3; i++) {
-            myListAdapter.addItem(myArrayList.get(i));
+        ArrayList<String> pref = new ArrayList<String>();
+        int pref_size = 0;
+
+        //현재 sharedpreference에 있는 값을 다 가져옴
+        while(preferences.getString("key"+pref_size,"") != ""){
+            pref.add(preferences.getString("key"+pref_size,""));
+            pref_size++;
         }
 
+        //sharedpreference에 값이 있으면
+        if (pref_size != 0){
+            for (int i = 0; i<pref_size;i++){
+                myListAdapter.addItem(pref.get(i));
+            }
+        }
+        myListAdapter.selectItem(-1);
         mListView.setAdapter(myListAdapter);
 
 

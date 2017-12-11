@@ -1,5 +1,6 @@
 package example.wherehere;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
@@ -10,11 +11,21 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Created by user on 2017-12-04.
  */
 
 public class MyTabFragment2 extends Fragment {
+
+    private ListView mListView;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
+    private ArrayList<String> pref;
+    private int pref_size;
 
     public MyTabFragment2()
     {
@@ -23,23 +34,34 @@ public class MyTabFragment2 extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-       final  View view = inflater.inflate(R.layout.activity_tab2, container, false);
+        final View view = inflater.inflate(R.layout.activity_tab2, container, false);
 
         ListView mListView;
         final MyListAdapter myListAdapter;
 
         myListAdapter = new MyListAdapter();
         mListView = (ListView) view.findViewById(R.id.listView2);
+
+        preferences = this.getActivity().getSharedPreferences("BOOKMARK", MODE_PRIVATE);
+        editor = preferences.edit();
+
+        pref = new ArrayList<String>();
+        pref_size = 0;
+
+        //현재 sharedpreference에 있는 값을 다 가져옴
+        while(preferences.getString("key"+pref_size,"") != ""){
+            pref.add(preferences.getString("key"+pref_size,""));
+            pref_size++;
+        }
+
+        //sharedpreference에 값이 있으면
+        if (pref_size != 0){
+            for (int i = 0; i<pref_size;i++){
+                myListAdapter.addItem(pref.get(i));
+            }
+        }
         mListView.setAdapter(myListAdapter);
         myListAdapter.selectItem(-1);
-
-//        final ArrayList<String> myArrayList = new ArrayList<>();
-//        myArrayList.add("ì¦ê²¨ì°¾ê¸° 1");
-//        myArrayList.add("ì¦ê²¨ì°¾ê¸° 2");
-//        myArrayList.add("ì¦ê²¨ì°¾ê¸° 3");
-//        for (int i = 0; i < 3; i++) {
-//            myListAdapter.addItem(myArrayList.get(i));
-//        }
 
         //ë²„íŠ¼ë„???ì—¬ê¸°ì„œ???
         Button button = (Button)view.findViewById(R.id.addButton);
