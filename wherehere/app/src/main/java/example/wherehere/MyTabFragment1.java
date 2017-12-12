@@ -35,6 +35,8 @@ public class MyTabFragment1 extends Fragment {
         final MyListAdapter myListAdapter;
         myListAdapter = new MyListAdapter();
 
+
+
         preferences = this.getActivity().getSharedPreferences("RECENT_RECORD", MODE_PRIVATE);
         editor = preferences.edit();
 
@@ -49,8 +51,16 @@ public class MyTabFragment1 extends Fragment {
 
         //sharedpreference에 값이 있으면
         if (pref_size != 0){
-            for (int i = 0; i<pref_size;i++){
-                myListAdapter.addItem(pref.get(i));
+            //최근 4개까지만 보여줌
+            if (pref_size > 4){
+                for (int i = 0; i<4;i++){
+                    myListAdapter.addItem(pref.get(i));
+                }
+            }
+            else{
+                for (int i = 0; i<pref_size;i++){
+                    myListAdapter.addItem(pref.get(i));
+                }
             }
         }
         myListAdapter.selectItem(-1);

@@ -143,6 +143,8 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                         pref.add(preferences.getString("key"+pref_size,""));
                         pref_size++;
                     }
+
+
                     //만약에 editText1값이 sharedpreference에 없으면
                     if (!pref.contains(autoComplete1.getText().toString())){
                         //만약에 editText2값도 sharedpreference에 없으면
@@ -150,22 +152,41 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                             editor.putString("key0", autoComplete1.getText().toString());
                             editor.putString("key1", autoComplete2.getText().toString());
                             //key 3 부터 채우기
-                            for (int i = 2; i < (pref_size + 2); i++) {
+                            //최근 기록부터 4개 까지만 저장하기 위해
+                            for (int i = 2; i < 4; i++) {
                                 editor.putString("key" + i, pref.get(i - 2));
                             }
                         }
                         //editText1값만 sharedpreference에 없으면
                         else {
                             editor.putString("key0",autoComplete1.getText().toString());
-                            for(int i = 1; i < (pref_size + 1);i++){
+                            for(int i = 1; i < 4;i++){
                                 editor.putString("key"+i,pref.get(i-1));
                             }
                         }
                     }
+                    else if(pref.contains(autoComplete1.getText().toString())){
+                        //만약에 editText2값도 sharedpreference에 없으면
+                        if (!pref.contains(autoComplete2.getText().toString())) {
+                            editor.putString("key0", autoComplete2.getText().toString());
+                            //editor.putString("key1", autoComplete2.getText().toString());
+                            //key 3 부터 채우기
+                            //최근 기록부터 4개 까지만 저장하기 위해
+                            for (int i = 1; i < 4; i++) {
+                                editor.putString("key" + i, pref.get(i - 1));
+                            }
+                        }
+                        //editText1값만 sharedpreference에 없으면
+                        else {
+                            //editor.putString("key0",autoComplete1.getText().toString());
+                            for(int i = 0; i < 4;i++){
+                                editor.putString("key"+i,pref.get(i));
+                            }
+                        }
+
+                    }
+
                     editor.commit();
-
-
-
 
                     start1.setStationName(getEdit1);
                     start2.setStationName(getEdit2);

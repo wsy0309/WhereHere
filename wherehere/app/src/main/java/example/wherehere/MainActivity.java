@@ -26,6 +26,8 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
         ImageView iv = new ImageView(this);
         iv.setBackgroundResource(R.drawable.intro_image);
         iv.setOnClickListener(new View.OnClickListener(){
