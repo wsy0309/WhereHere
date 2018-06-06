@@ -7,6 +7,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class PlayActivity extends AppCompatActivity {
 
@@ -14,8 +16,10 @@ public class PlayActivity extends AppCompatActivity {
     private int cur_input = 0;
     private int[] random_num = new int[6];
     private int[] submit_num = new int[6];
-    private Thread thread = new Thread();
     private FindImage findImage = new FindImage();
+
+    private Timer timer;
+    private int timer_cnt = 0;
 
     private ImageView board_1;
     private ImageView board_2;
@@ -169,7 +173,6 @@ public class PlayActivity extends AppCompatActivity {
 
                         if(stage_cnt < 3){
                             playGame(4);
-
                         }else if(stage_cnt >=3 && stage_cnt <6){
                             playGame(5);
                         }else if(stage_cnt >=6 && stage_cnt <9){
@@ -191,325 +194,182 @@ public class PlayActivity extends AppCompatActivity {
                     }
                 }
         );
-
-
     }
 
-    /*
-    //현재 스테이지 이미지 선택
-    public int selectStageImg(int stage_cnt){
+    public void playGame(final int count) {
 
-        //switch를 통해 해당하는 이미지 id return
-        if (stage_cnt < 3)
-            return R.drawable.stage_1;
-        else if (stage_cnt >= 3 && stage_cnt < 6)
-            return R.drawable.stage_2;
-        else if (stage_cnt >=6 && stage_cnt < 9)
-            return R.drawable.stage_3;
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
 
-        //이제 게임끝
-        return 0;
+                //이전에 포켓몬 뜬거 없애기
+                if (timer_cnt > 0){
+                    setBoard_image(random_num[timer_cnt - 1], findImage.selectBoard_init_img(random_num[timer_cnt - 1]));
+                }
+                //타이머 종료 조건
+                if (timer_cnt >= count){
+                    timer_cnt = 0;
+                    timer.cancel();
+                }
+                else{
+                    //타이머가 실행될때마다 하는 일
+                    Random random = new Random();
+                    random_num[timer_cnt] = random.nextInt(16) + 1;
+                    int board_img = findImage.selectBoard_img(random_num[timer_cnt]);
+                    int board_init_img = findImage.selectBoard_init_img(random_num[timer_cnt]);
+                    setBoard_image(random_num[timer_cnt], findImage.selectBoard_img(random_num[timer_cnt]));
+                    timer_cnt++;
+                }
+            }
+        };
+        timer = new Timer();
+        timer.schedule(timerTask,1000,1000);
     }
-*/
+
     //몇번째 inputView의 이미지를 바꿀지 선택
     public void selectInputImg(int cur,int img_id){
         //1 <= cur <= 6 로 예상
         switch (cur){
             case 0:
                 input_1.setImageResource(img_id);
-                cur_input++;
                 break;
             case 1:
                 input_2.setImageResource(img_id);
-                cur_input++;
                 break;
         }
+        cur_input++;
     }
 
-    public void playGame(int count) {
-        for (int i = 0; i < count; i++) {
-            //random num 생성
-            Random random = new Random();
-            random_num[i] = random.nextInt(16) + 1;
-            findImage.selectBoard_img(random_num[i]);
-            //화면에 1초동안 띄우는 코드 여기에 추가!!
-            findImage.selectBoard_init_img(random_num[i]);
-
-        }
-    }
-
-/*
-    public void blinkBoardImg (int ran_num) throws InterruptedException {
-
-        switch (ran_num){
+    public void setBoard_image(int board_num, final int image){
+        switch (board_num){
             case 1 :
-                board_1.setImageResource(R.drawable.board_1);
-                //일정 시간 딜레이
-                thread.sleep(3000);
-                board_1.setImageResource(R.drawable.board_init_1);
+                board_1.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        board_1.setImageResource(image);
+                    }
+                });
                 break;
             case 2 :
-                board_2.setImageResource(R.drawable.board_2);
-                //일정 시간 딜레이
-                thread.sleep(3000);
-                board_2.setImageResource(R.drawable.board_init_2);
+                board_2.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        board_2.setImageResource(image);
+                    }
+                });
                 break;
             case 3 :
-                board_3.setImageResource(R.drawable.board_3);
-                //일정 시간 딜레이
-                thread.sleep(3000);
-                board_3.setImageResource(R.drawable.board_init_3);
+                board_3.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        board_3.setImageResource(image);
+                    }
+                });
                 break;
             case 4 :
-                board_4.setImageResource(R.drawable.board_4);
-                //일정 시간 딜레이
-                thread.sleep(3000);
-                board_4.setImageResource(R.drawable.board_init_4);
+                board_4.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        board_4.setImageResource(image);
+                    }
+                });
                 break;
             case 5 :
-                board_5.setImageResource(R.drawable.board_5);
-                //일정 시간 딜레이
-                thread.sleep(3000);
-                board_5.setImageResource(R.drawable.board_init_5);
+                board_5.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        board_5.setImageResource(image);
+                    }
+                });
                 break;
             case 6 :
-                board_6.setImageResource(R.drawable.board_6);
-                //일정 시간 딜레이
-                thread.sleep(3000);
-                board_6.setImageResource(R.drawable.board_init_6);
+                board_6.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        board_6.setImageResource(image);
+                    }
+                });
                 break;
             case 7 :
-                board_7.setImageResource(R.drawable.board_7);
-                //일정 시간 딜레이
-                thread.sleep(3000);
-                board_7.setImageResource(R.drawable.board_init_7);
+                board_7.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        board_7.setImageResource(image);
+                    }
+                });
                 break;
             case 8 :
-                board_8.setImageResource(R.drawable.board_8);
-                //일정 시간 딜레이
-                thread.sleep(3000);
-                board_8.setImageResource(R.drawable.board_init_8);
+                board_8.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        board_8.setImageResource(image);
+                    }
+                });
                 break;
             case 9 :
-                board_9.setImageResource(R.drawable.board_9);
-                //일정 시간 딜레이
-                thread.sleep(3000);
-                board_9.setImageResource(R.drawable.board_init_9);
+                board_9.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        board_9.setImageResource(image);
+                    }
+                });
                 break;
             case 10 :
-                board_10.setImageResource(R.drawable.board_10);
-                //일정 시간 딜레이
-                thread.sleep(3000);
-                board_10.setImageResource(R.drawable.board_init_10);
+                board_10.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        board_10.setImageResource(image);
+                    }
+                });
                 break;
             case 11 :
-                board_11.setImageResource(R.drawable.board_11);
-                //일정 시간 딜레이
-                thread.sleep(3000);
-                board_11.setImageResource(R.drawable.board_init_11);
+                board_11.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        board_11.setImageResource(image);
+                    }
+                });
                 break;
             case 12 :
-                board_12.setImageResource(R.drawable.board_12);
-                //일정 시간 딜레이
-                thread.sleep(3000);
-                board_12.setImageResource(R.drawable.board_init_12);
+                board_12.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        board_12.setImageResource(image);
+                    }
+                });
                 break;
             case 13 :
-                board_13.setImageResource(R.drawable.board_13);
-                //일정 시간 딜레이
-                thread.sleep(3000);
-                board_13.setImageResource(R.drawable.board_init_13);
+                board_13.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        board_13.setImageResource(image);
+                    }
+                });
                 break;
             case 14 :
-                board_14.setImageResource(R.drawable.board_14);
-                //일정 시간 딜레이
-                thread.sleep(3000);
-                board_14.setImageResource(R.drawable.board_init_14);
+                board_14.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        board_14.setImageResource(image);
+                    }
+                });
                 break;
             case 15 :
-                board_15.setImageResource(R.drawable.board_15);
-                //일정 시간 딜레이
-                thread.sleep(3000);
-                board_15.setImageResource(R.drawable.board_init_15);
+                board_15.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        board_15.setImageResource(image);
+                    }
+                });
                 break;
             case 16 :
-                board_16.setImageResource(R.drawable.board_16);
-                //일정 시간 딜레이
-                thread.sleep(3000);
-                board_16.setImageResource(R.drawable.board_init_16);
+                board_16.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        board_16.setImageResource(image);
+                    }
+                });
                 break;
-
         }
     }
-*/
-
-    /*
-    public void blinkBoardImg (int ran_num){
-
-        Handler delayHandler = new Handler();
-
-        switch (ran_num){
-            case 1 :
-                board_1.setImageResource(R.drawable.board_1);
-                //1초후 아래 코드실행
-                delayHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        board_1.setImageResource(R.drawable.board_init_1);
-                    }
-                }, 3000);
-                break;
-            case 2 :
-                board_2.setImageResource(R.drawable.board_2);
-                //1초후 아래 코드실행
-                delayHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        board_1.setImageResource(R.drawable.board_init_2);
-                    }
-                }, 3000);
-                break;
-            case 3 :
-                board_3.setImageResource(R.drawable.board_3);
-                //1초후 아래 코드실행
-                delayHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        board_1.setImageResource(R.drawable.board_init_3);
-                    }
-                }, 3000);
-                break;
-            case 4 :
-                board_4.setImageResource(R.drawable.board_4);
-                //1초후 아래 코드실행
-                delayHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        board_1.setImageResource(R.drawable.board_init_4);
-                    }
-                }, 3000);
-                break;
-            case 5 :
-                board_5.setImageResource(R.drawable.board_5);
-                //1초후 아래 코드실행
-                delayHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        board_1.setImageResource(R.drawable.board_init_5);
-                    }
-                }, 3000);
-                break;
-            case 6 :
-                board_6.setImageResource(R.drawable.board_6);
-                //1초후 아래 코드실행
-                delayHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        board_1.setImageResource(R.drawable.board_init_6);
-                    }
-                }, 3000);
-                break;
-            case 7 :
-                board_7.setImageResource(R.drawable.board_7);
-                //1초후 아래 코드실행
-                delayHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        board_1.setImageResource(R.drawable.board_init_7);
-                    }
-                }, 3000);
-                break;
-            case 8 :
-                board_8.setImageResource(R.drawable.board_8);
-                //1초후 아래 코드실행
-                delayHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        board_1.setImageResource(R.drawable.board_init_8);
-                    }
-                }, 3000);
-                break;
-            case 9 :
-                board_9.setImageResource(R.drawable.board_9);
-                //1초후 아래 코드실행
-                delayHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        board_1.setImageResource(R.drawable.board_init_9);
-                    }
-                }, 3000);
-            case 10 :
-                board_10.setImageResource(R.drawable.board_10);
-                //1초후 아래 코드실행
-                delayHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        board_1.setImageResource(R.drawable.board_init_10);
-                    }
-                }, 3000);
-                break;
-            case 11 :
-                board_11.setImageResource(R.drawable.board_11);
-                //1초후 아래 코드실행
-                delayHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        board_1.setImageResource(R.drawable.board_init_11);
-                    }
-                }, 3000);
-                break;
-            case 12 :
-                board_12.setImageResource(R.drawable.board_12);
-                //1초후 아래 코드실행
-                delayHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        board_1.setImageResource(R.drawable.board_init_12);
-                    }
-                }, 3000);
-                break;
-            case 13 :
-                board_13.setImageResource(R.drawable.board_13);
-                //1초후 아래 코드실행
-                delayHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        board_1.setImageResource(R.drawable.board_init_13);
-                    }
-                }, 3000);
-                break;
-            case 14 :
-                board_14.setImageResource(R.drawable.board_14);
-                //1초후 아래 코드실행
-                delayHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        board_1.setImageResource(R.drawable.board_init_14);
-                    }
-                }, 3000);
-                break;
-            case 15 :
-                board_15.setImageResource(R.drawable.board_15);
-                //1초후 아래 코드실행
-                delayHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        board_1.setImageResource(R.drawable.board_init_15);
-                    }
-                }, 3000);
-                break;
-            case 16 :
-                board_16.setImageResource(R.drawable.board_16);
-                //1초후 아래 코드실행
-                delayHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        board_1.setImageResource(R.drawable.board_init_16);
-                    }
-                }, 3000);
-                break;
-
-        }
-    }
-    */
 }
