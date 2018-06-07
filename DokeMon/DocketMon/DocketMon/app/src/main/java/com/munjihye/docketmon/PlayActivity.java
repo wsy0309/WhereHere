@@ -1,5 +1,6 @@
 package com.munjihye.docketmon;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -202,8 +203,6 @@ public class PlayActivity extends AppCompatActivity {
                             stage.setImageResource(R.drawable.stage_2);
                         }else if(stage_cnt == 6){
                             stage.setImageResource(R.drawable.stage_3);
-                        }else if(stage_cnt == 9){
-                            // 종료
                         }
                     }
                 }
@@ -215,7 +214,6 @@ public class PlayActivity extends AppCompatActivity {
                         //제출배열이랑 정답배열이랑 비교
                         //정답 여부에 따라 input_bg 이미지 변환
                         //board에 정답 띄우기
-                        //???그럼 또 스위치?????
                         if (random_num.equals(submit_num)){
                             correct();
                         }
@@ -266,6 +264,12 @@ public class PlayActivity extends AppCompatActivity {
     public void correct(){
         input_bg.setImageResource(R.drawable.input_correct);
         stage_cnt++;
+        if(stage_cnt == 9){
+            // end activity로 전환
+            Intent intent = new Intent(PlayActivity.this,EndActivity.class);
+            //액티비티 시작!
+            startActivity(intent);
+        }
     }
 
 
@@ -277,8 +281,6 @@ public class PlayActivity extends AppCompatActivity {
             stage = 5;
         }else if(stage_cnt >=6 && stage_cnt <9){
             stage = 6;
-        }else if(stage_cnt == 9){
-            stage = 0;
         }
         return stage;
     }
