@@ -6,7 +6,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -14,12 +15,17 @@ public class PlayActivity extends AppCompatActivity {
 
     private int stage_cnt = 0;
     private int cur_input = 0;
-    private int[] random_num = new int[6];
-    private int[] submit_num = new int[6];
+
+    private ArrayList<Integer> num = new ArrayList<>();
+    private ArrayList<Integer> random_num = new ArrayList<>();
+    private ArrayList<Integer> submit_num = new ArrayList<>();
+
     private FindImage findImage = new FindImage();
 
     private Timer timer;
     private int timer_cnt = 0;
+
+    private ImageView stage;
 
     private ImageView board_1;
     private ImageView board_2;
@@ -39,15 +45,20 @@ public class PlayActivity extends AppCompatActivity {
     private ImageView board_16;
 
 
+    private ImageView input_bg;
     private ImageView input_1;
     private ImageView input_2;
+    private ImageView input_3;
+    private ImageView input_4;
+    private ImageView input_5;
+    private ImageView input_6;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
 
-        ImageView stage = (ImageView)findViewById(R.id.stage);
+        stage = (ImageView)findViewById(R.id.stage);
 
         board_1 = (ImageView)findViewById(R.id.board_1);
         board_2 = (ImageView)findViewById(R.id.board_2);
@@ -69,99 +80,99 @@ public class PlayActivity extends AppCompatActivity {
         ImageView start = (ImageView)findViewById(R.id.start_btn);
         final ImageView submit = (ImageView)findViewById(R.id.submit_btn);
 
+        input_bg = (ImageView)findViewById(R.id.input_bg);
         input_1 = (ImageView)findViewById(R.id.input_1);
         input_2 = (ImageView)findViewById(R.id.input_2);
+        input_3 = (ImageView)findViewById(R.id.input_3);
+        input_4 = (ImageView)findViewById(R.id.input_4);
+        input_5 = (ImageView)findViewById(R.id.input_5);
+        input_6 = (ImageView)findViewById(R.id.input_6);
 
-
-
-        int stg_img = findImage.selectStageImg(stage_cnt);
-        //게임끝
-        if (stg_img == 0){
-            //전체 화면 덮기
-        }
-        stage.setImageResource(stg_img);
 
         //해당 board num을 제출 배열에 따로 저장해둬서 submit버튼 누르면 정답배열이랑 비교해야함
         board_1.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                submit_num[cur_input] = 1;
-                selectInputImg(cur_input,R.drawable.board_init_1);}});
+                submit_num.add(1);
+                setInputImg(cur_input,R.drawable.board_1);}});
 
         board_2.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                submit_num[cur_input] = 2;
-                selectInputImg(cur_input,R.drawable.board_init_2);}});
+                submit_num.add(2);
+                setInputImg(cur_input,R.drawable.board_2);}});
         board_3.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                submit_num[cur_input] = 3;
-                selectInputImg(cur_input,R.drawable.board_init_3);}
+                submit_num.add(3);
+                setInputImg(cur_input,R.drawable.board_3);}
         });
         board_4.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                submit_num[cur_input] = 4;
-                selectInputImg(cur_input,R.drawable.board_init_4);}
+                submit_num.add(4);
+                setInputImg(cur_input,R.drawable.board_4);}
         });
         board_5.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                submit_num[cur_input] = 5;
-                selectInputImg(cur_input,R.drawable.board_init_5);}
+                submit_num.add(5);
+                setInputImg(cur_input,R.drawable.board_5);}
         });
         board_6.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                submit_num[cur_input] = 6;
-                selectInputImg(cur_input,R.drawable.board_init_6);}
+                submit_num.add(6);
+                setInputImg(cur_input,R.drawable.board_6);}
         });
         board_7.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                submit_num[cur_input] = 7;
-                selectInputImg(cur_input,R.drawable.board_init_7);}
+                submit_num.add(7);
+                setInputImg(cur_input,R.drawable.board_7);}
         });
         board_8.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                submit_num[cur_input] = 8;
-                selectInputImg(cur_input,R.drawable.board_init_8);}
+                submit_num.add(8);
+                setInputImg(cur_input,R.drawable.board_8);}
         });
         board_9.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                submit_num[cur_input] = 9;
-                selectInputImg(cur_input,R.drawable.board_init_9);}
+                submit_num.add(9);
+                setInputImg(cur_input,R.drawable.board_9);}
         });
         board_10.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                submit_num[cur_input] = 10;
-                selectInputImg(cur_input,R.drawable.board_init_10);}
+                submit_num.add(10);
+                setInputImg(cur_input,R.drawable.board_10);}
         });
         board_11.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                submit_num[cur_input] = 11;
-                selectInputImg(cur_input,R.drawable.board_init_11);}
+                submit_num.add(11);
+                setInputImg(cur_input,R.drawable.board_11);}
         });
         board_12.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                submit_num[cur_input] = 12;
-                selectInputImg(cur_input,R.drawable.board_init_12);}
+                submit_num.add(12);
+                setInputImg(cur_input,R.drawable.board_12);}
         });
         board_13.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                submit_num[cur_input] = 13;
-                selectInputImg(cur_input,R.drawable.board_init_13);}
+                submit_num.add(13);
+                setInputImg(cur_input,R.drawable.board_13);}
         });
         board_14.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                submit_num[cur_input] = 14;
-                selectInputImg(cur_input,R.drawable.board_init_14);}
+                submit_num.add(14);
+                setInputImg(cur_input,R.drawable.board_14);}
         });
         board_15.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                submit_num[cur_input] = 15;
-                selectInputImg(cur_input,R.drawable.board_init_15);}
+                submit_num.add(15);
+                setInputImg(cur_input,R.drawable.board_15);}
         });
         board_16.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                submit_num[cur_input] = 16;
-                selectInputImg(cur_input,R.drawable.board_init_16);}
+                submit_num.add(16);
+                setInputImg(cur_input,R.drawable.board_16);}
         });
 
+        for(int i=0; i< 16; i++) {
+            num.add(i + 1);
+        }
 
         start.setOnClickListener(
                 new Button.OnClickListener() {
@@ -169,16 +180,30 @@ public class PlayActivity extends AppCompatActivity {
                         //일정 시간마다 랜덤수 발생 & board 배경이미지로 초기화
                         //랜덤수는 정답배열에 따로 저장해둠
                         //랜덤수에 따라 해당하는 board 이미지 변환
-                        //board랑 input 이미지 초기화도.....
+                        //board 초기화
+                        for(int i= 1; i <= 16 ; i++){
+                            setBoard_image(i,findImage.selectBoard_init_img(i));
+                        }
+                        //input 초기화
+                        input_bg.setImageResource(R.drawable.input_bg);
+                        for(int i= 0; i < 6 ; i++){
+                            setInputImg(i,R.drawable.input_init);
+                        }
 
-                        if(stage_cnt < 3){
-                            playGame(4);
-                        }else if(stage_cnt >=3 && stage_cnt <6){
-                            playGame(5);
-                        }else if(stage_cnt >=6 && stage_cnt <9){
-                           playGame(6);
+                        //random submit 클리어
+                        Collections.shuffle(num);
+                        random_num.clear();
+                        submit_num.clear();
+                        cur_input = 0;
+
+                        playGame(findStage(stage_cnt));
+
+                        if(stage_cnt == 3){
+                            stage.setImageResource(R.drawable.stage_2);
+                        }else if(stage_cnt == 6){
+                            stage.setImageResource(R.drawable.stage_3);
                         }else if(stage_cnt == 9){
-                            //종료
+                            // 종료
                         }
                     }
                 }
@@ -191,20 +216,83 @@ public class PlayActivity extends AppCompatActivity {
                         //정답 여부에 따라 input_bg 이미지 변환
                         //board에 정답 띄우기
                         //???그럼 또 스위치?????
+                        if (random_num.equals(submit_num)){
+                            correct();
+                        }
+                        else{
+                            error();
+                        }
                     }
                 }
         );
     }
 
-    public void playGame(final int count) {
+    public void error(){
+        input_bg.setImageResource(R.drawable.input_error);
 
-        TimerTask timerTask = new TimerTask() {
+        final TimerTask timerTask2 = new TimerTask() {
             @Override
             public void run() {
 
                 //이전에 포켓몬 뜬거 없애기
                 if (timer_cnt > 0){
-                    setBoard_image(random_num[timer_cnt - 1], findImage.selectBoard_init_img(random_num[timer_cnt - 1]));
+                    setBoard_image(random_num.get(timer_cnt-1), findImage.selectBoard_init_img(random_num.get(timer_cnt-1)));
+                }
+                //타이머 종료 조건
+                if (timer_cnt >= findStage(stage_cnt)){
+                    //정답 띄우기
+                    for (int i = 0; i < random_num.size();i++){
+                        setBoard_image(random_num.get(i),findImage.selectBoard_img(random_num.get(i)));
+                    }
+                    timer_cnt = 0;
+                    timer.cancel();
+                }
+                else{
+                    //타이머가 실행될때마다 하는 일
+                    int board_img = findImage.selectBoard_img(random_num.get(timer_cnt));
+                    //int board_init_img = findImage.selectBoard_init_img(random_num.get(timer_cnt));
+                    setBoard_image(random_num.get(timer_cnt), findImage.selectBoard_img(random_num.get(timer_cnt)));
+                    timer_cnt++;
+                }
+            }
+        };
+        timer = new Timer();
+        timer.schedule(timerTask2,1000,1000);
+
+
+
+    }
+
+    public void correct(){
+        input_bg.setImageResource(R.drawable.input_correct);
+        stage_cnt++;
+    }
+
+
+    public int findStage(int stage_cnt){
+        int stage = 0;
+        if(stage_cnt < 3){
+            stage = 4;
+        }else if(stage_cnt >=3 && stage_cnt <6){
+            stage = 5;
+        }else if(stage_cnt >=6 && stage_cnt <9){
+            stage = 6;
+        }else if(stage_cnt == 9){
+            stage = 0;
+        }
+        return stage;
+    }
+
+
+    public void playGame(final int count) {
+
+        final TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+
+                //이전에 포켓몬 뜬거 없애기
+                if (timer_cnt > 0){
+                    setBoard_image(random_num.get(timer_cnt-1), findImage.selectBoard_init_img(random_num.get(timer_cnt-1)));
                 }
                 //타이머 종료 조건
                 if (timer_cnt >= count){
@@ -212,12 +300,14 @@ public class PlayActivity extends AppCompatActivity {
                     timer.cancel();
                 }
                 else{
+
                     //타이머가 실행될때마다 하는 일
-                    Random random = new Random();
-                    random_num[timer_cnt] = random.nextInt(16) + 1;
-                    int board_img = findImage.selectBoard_img(random_num[timer_cnt]);
-                    int board_init_img = findImage.selectBoard_init_img(random_num[timer_cnt]);
-                    setBoard_image(random_num[timer_cnt], findImage.selectBoard_img(random_num[timer_cnt]));
+                    //Random random = new Random();
+                    //random_num.add(timer_cnt,random.nextInt(16) + 1);
+                    random_num.add(timer_cnt,num.get(timer_cnt));
+                    int board_img = findImage.selectBoard_img(random_num.get(timer_cnt));
+                    //int board_init_img = findImage.selectBoard_init_img(random_num.get(timer_cnt));
+                    setBoard_image(random_num.get(timer_cnt), findImage.selectBoard_img(random_num.get(timer_cnt)));
                     timer_cnt++;
                 }
             }
@@ -227,7 +317,7 @@ public class PlayActivity extends AppCompatActivity {
     }
 
     //몇번째 inputView의 이미지를 바꿀지 선택
-    public void selectInputImg(int cur,int img_id){
+    public void setInputImg(int cur,int img_id){
         //1 <= cur <= 6 로 예상
         switch (cur){
             case 0:
@@ -235,6 +325,18 @@ public class PlayActivity extends AppCompatActivity {
                 break;
             case 1:
                 input_2.setImageResource(img_id);
+                break;
+            case 2:
+                input_3.setImageResource(img_id);
+                break;
+            case 3:
+                input_4.setImageResource(img_id);
+                break;
+            case 4:
+                input_5.setImageResource(img_id);
+                break;
+            case 5:
+                input_6.setImageResource(img_id);
                 break;
         }
         cur_input++;

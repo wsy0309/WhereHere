@@ -116,7 +116,7 @@ public class FindImage {
                 init_img =  R.drawable.board_13;
                 break;
             case 14:
-                init_img =  R.drawable.board_4;
+                init_img =  R.drawable.board_14;
                 break;
             case 15:
                 init_img =  R.drawable.board_15;
