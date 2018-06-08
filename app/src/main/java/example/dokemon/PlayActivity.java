@@ -203,18 +203,8 @@ public class PlayActivity extends Activity {
                         cur_input = 0;
 
                         playGame(findStage(stage_cnt));
-
-                        if(stage_cnt == 3){
-                            effectSound(R.raw.stage_up);
-                            stage.setImageResource(R.drawable.stage_2);
-                        }else if(stage_cnt == 6){
-                            effectSound(R.raw.stage_up);
-                            stage.setImageResource(R.drawable.stage_3);
-                        }
-
                     }
                 }
-
         );
 
         submit.setOnClickListener(
@@ -259,7 +249,6 @@ public class PlayActivity extends Activity {
                 else{
                     //타이머가 실행될때마다 하는 일
                     int board_img = findImage.selectBoard_img(random_num.get(timer_cnt));
-                    //int board_init_img = findImage.selectBoard_init_img(random_num.get(timer_cnt));
                     setBoard_image(random_num.get(timer_cnt), findImage.selectBoard_img(random_num.get(timer_cnt)));
                     timer_cnt++;
                 }
@@ -274,13 +263,20 @@ public class PlayActivity extends Activity {
 
     public void correct(){
         input_bg.setImageResource(R.drawable.input_correct);
-        effectSound(R.raw.win);
         stage_cnt++;
-        if(stage_cnt == 9){
+
+        if(stage_cnt == 3){
+            effectSound(R.raw.stage_up);
+            stage.setImageResource(R.drawable.stage_2);
+        }else if(stage_cnt == 6){
+            effectSound(R.raw.stage_up);
+            stage.setImageResource(R.drawable.stage_3);
+        }else if(stage_cnt == 9){
             // end activity로 전환
             Intent intent = new Intent(PlayActivity.this,EndActivity.class);
-            //액티비티 시작!
             startActivity(intent);
+        }else{
+            effectSound(R.raw.win);
         }
     }
 
@@ -336,6 +332,7 @@ public class PlayActivity extends Activity {
                     random_num.add(timer_cnt,num.get(timer_cnt));
                     int board_img = findImage.selectBoard_img(random_num.get(timer_cnt));
                     //int board_init_img = findImage.selectBoard_init_img(random_num.get(timer_cnt));
+                    effectSound(R.raw.ddoing);
                     setBoard_image(random_num.get(timer_cnt), findImage.selectBoard_img(random_num.get(timer_cnt)));
                     timer_cnt++;
                 }
