@@ -2,7 +2,9 @@ package example.dokemon;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,7 +16,7 @@ import java.util.TimerTask;
 
 public class PlayActivity extends Activity {
 
-
+    protected boolean enabled = true;
     private int stage_cnt = 0;
     private int cur_input = 0;
 
@@ -24,6 +26,7 @@ public class PlayActivity extends Activity {
 
     private FindImage findImage = new FindImage();
 
+    private MediaPlayer mediaPlayer;
     private Timer timer;
     private int timer_cnt = 0;
 
@@ -59,7 +62,6 @@ public class PlayActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
-
 
         stage = (ImageView)findViewById(R.id.stage);
 
@@ -184,6 +186,7 @@ public class PlayActivity extends Activity {
                         //랜덤수는 정답배열에 따로 저장해둠
                         //랜덤수에 따라 해당하는 board 이미지 변환
                         //board 초기화
+
                         for(int i= 1; i <= 16 ; i++){
                             setBoard_image(i,findImage.selectBoard_init_img(i));
                         }
@@ -202,12 +205,16 @@ public class PlayActivity extends Activity {
                         playGame(findStage(stage_cnt));
 
                         if(stage_cnt == 3){
+                            effectSound(R.raw.stage_up);
                             stage.setImageResource(R.drawable.stage_2);
                         }else if(stage_cnt == 6){
+                            effectSound(R.raw.stage_up);
                             stage.setImageResource(R.drawable.stage_3);
                         }
+
                     }
                 }
+
         );
 
         submit.setOnClickListener(
@@ -229,7 +236,8 @@ public class PlayActivity extends Activity {
 
     public void error(){
         input_bg.setImageResource(R.drawable.input_error);
-
+        effectSound(R.raw.lose);
+        enable(false);
         final TimerTask timerTask2 = new TimerTask() {
             @Override
             public void run() {
@@ -244,6 +252,7 @@ public class PlayActivity extends Activity {
                     for (int i = 0; i < random_num.size();i++){
                         setBoard_image(random_num.get(i),findImage.selectBoard_img(random_num.get(i)));
                     }
+                    enable(true);
                     timer_cnt = 0;
                     timer.cancel();
                 }
@@ -265,15 +274,15 @@ public class PlayActivity extends Activity {
 
     public void correct(){
         input_bg.setImageResource(R.drawable.input_correct);
+        effectSound(R.raw.win);
         stage_cnt++;
-        if(stage_cnt == 4){
+        if(stage_cnt == 9){
             // end activity로 전환
             Intent intent = new Intent(PlayActivity.this,EndActivity.class);
             //액티비티 시작!
             startActivity(intent);
         }
     }
-
 
     public int findStage(int stage_cnt){
         int stage = 0;
@@ -288,8 +297,22 @@ public class PlayActivity extends Activity {
     }
 
 
-    public void playGame(final int count) {
+    //입력 제한 false : 제한, true : 허용
+    public void enable(boolean b) {
+        enabled = b;
+    }
 
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return enabled ?
+                super.dispatchTouchEvent(ev) :
+                true;
+    }
+
+
+    public void playGame(final int count) {
+        //입력 막기
+        enable(false);
         final TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
@@ -298,10 +321,12 @@ public class PlayActivity extends Activity {
                 if (timer_cnt > 0){
                     setBoard_image(random_num.get(timer_cnt-1), findImage.selectBoard_init_img(random_num.get(timer_cnt-1)));
                 }
-                //타이머 종료 조건
+                //타이머 종료 조건 + 입력 풀기
                 if (timer_cnt >= count){
                     timer_cnt = 0;
+                    enable(true);
                     timer.cancel();
+
                 }
                 else{
 
@@ -318,6 +343,12 @@ public class PlayActivity extends Activity {
         };
         timer = new Timer();
         timer.schedule(timerTask,1000,1000);
+
+    }
+
+    public void effectSound(int id){
+        mediaPlayer = MediaPlayer.create(this,id);
+        mediaPlayer.start();
     }
 
     //몇번째 inputView의 이미지를 바꿀지 선택
